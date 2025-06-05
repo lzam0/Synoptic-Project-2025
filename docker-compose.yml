@@ -1,0 +1,18 @@
+services:
+  dataflow-db:
+    image: postgres:13
+    container_name: dataflow-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dataflow-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - data-system-network
+
+networks:
+  data-system-network:
+    driver: bridge

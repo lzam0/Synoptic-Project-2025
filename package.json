@@ -1,0 +1,20 @@
+{
+  "name": "Synoptic-Project-G62",
+  "description": "Synoptic Project 2025 Group 62",
+  "main": "server.js",
+  "scripts": {
+    "start": "node node/server.js",
+    "dev": "nodemon node/server.js",
+    "db": "docker-compose down && docker-compose up --build -d"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "node": "^22.16.0",
+    "nodemon": "^3.1.10",
+    "pg": "^8.16.0",
+    "pug": "^3.0.3"
+  }
+}
