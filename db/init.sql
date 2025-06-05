@@ -8,11 +8,13 @@ CREATE TABLE IF NOT EXISTS "users" (
 
 INSERT INTO "users" (
     user_id,
-    email, 
+    username,
+    password_hash 
 )
 VALUES
 -- admin account
 (
     uuid_generate_v4(),  
-    'parkflow113@gmail.com'
+    "dataflow-admin",
+    ""
 );
