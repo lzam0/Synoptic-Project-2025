@@ -2,6 +2,7 @@
   "name": "Synoptic-Project-G62",
   "description": "Synoptic Project 2025 Group 62",
   "main": "server.js",
+  "type": "commonjs",
   "scripts": {
     "start": "node node/server.js",
     "dev": "nodemon node/server.js",
