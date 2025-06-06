@@ -1,9 +1,10 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const app = express();
 const session = require('express-session');
+const app = express();
 
+const authRoutes = require('./routes/authRoutes');
 
 // Load environment variables from the .env file
 require('dotenv').config();
@@ -15,6 +16,8 @@ const port = process.env.PORT
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Middleware to parse form data
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -23,6 +26,8 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.render('index');
 });
+
+app.use('/', authRoutes);
 
 // Start the server
 const server = app.listen(port, () => {
