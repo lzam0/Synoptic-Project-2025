@@ -11,7 +11,10 @@ html(lang="en")
       ul.nav-links
         li: a(href="/") Home
         li: a(href="/admin") Admin
-        li: a(href="/logout") Logout
+        li
+          form(action="/logout", method="POST")
+            button(type="submit") Logout
+
 
     .container
       h1 Admin Dashboard

@@ -13,4 +13,9 @@ router.post('/login', (req, res, next) => {
   next();  // important!
 }, AuthController.login);
 
+router.post('/logout', (req, res) => {
+  res.clearCookie('token');  // Clear the cookie holding the JWT
+  res.redirect('/login');    // Or send JSON response if API
+});
+
 module.exports = router;
