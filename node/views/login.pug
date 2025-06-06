@@ -8,9 +8,9 @@ html(lang="en")
   body
     .login-container
       h2 Login
-      form(action="/auth/login", method="POST")
-        label(for="email") Email:
-        input(type="email", name="email", id="email", required)
+      form(action="/login", method="POST")
+        label(for="username") Username:
+        input(type="text", name="username", id="username", required)
 
         label(for="password") Password:
         input(type="password", name="password", id="password", required)

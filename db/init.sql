@@ -1,20 +1,24 @@
---Extension to generate unique IDs
+-- Extension to generate unique IDs
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- Create users table
 CREATE TABLE IF NOT EXISTS "users" (
     user_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    email VARCHAR(100) UNIQUE NOT NULL
+    email VARCHAR(100) UNIQUE NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL
 );
 
+-- Insert admin account
 INSERT INTO "users" (
     user_id,
+    email,
     username,
     password_hash 
 )
-VALUES
--- admin account
-(
-    uuid_generate_v4(),  
-    "dataflow-admin",
-    ""
+VALUES (
+    uuid_generate_v4(),
+    'parkflow113@gmail.com',
+    'dataflow',
+    '$2b$10$vMw5XNphBJDUy1avQJbjeO8vCIi4/KlRRJ/pfretvAXkU2AQyIaYy'
 );

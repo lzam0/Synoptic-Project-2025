@@ -1,10 +1,12 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const app = express();
 
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./routes/authRouter');
+const adminRouter = require('./routes/adminRouter');
 
 // Load environment variables from the .env file
 require('dotenv').config();
@@ -22,12 +24,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Middleware to parse cookies
+app.use(cookieParser());
+
 // Routes
 app.get('/', (req, res) => {
   res.render('index');
 });
 
 app.use('/', authRoutes);
+app.use('/', adminRouter);
 
 // Start the server
 const server = app.listen(port, () => {

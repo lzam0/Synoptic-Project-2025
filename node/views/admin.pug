@@ -1,0 +1,28 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Admin Dashboard
+    link(rel="stylesheet", href="/css/style.css")
+  body
+    nav.navbar
+      a.navbar-brand(href="/") MyApp
+      ul.nav-links
+        li: a(href="/") Home
+        li: a(href="/admin") Admin
+        li: a(href="/logout") Logout
+
+    .container
+      h1 Admin Dashboard
+      p Welcome, Admin! Manage your application here.
+
+      section.admin-section
+        h2 User Management
+        p View and manage users here.
+        //- Add your user management features later
+
+      section.admin-section
+        h2 Reports
+        p View system reports and logs here.
+        //- Add reports or analytics features here
