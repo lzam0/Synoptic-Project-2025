@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS "users" (
     password_hash TEXT NOT NULL
 );
 
+-- Create river table
 CREATE TABLE IF NOT EXISTS river (
     river_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     station VARCHAR(255),
@@ -17,9 +18,10 @@ CREATE TABLE IF NOT EXISTS river (
     date DATE NOT NULL,
     time TIME NOT NULL,
     level DECIMAL(10, 3),   
-    flow DECIMAL(10, 3), 
+    flow DECIMAL(10, 3)
 );
 
+-- Create dams table
 CREATE TABLE IF NOT EXISTS dams (
     dams_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     dam_name VARCHAR(255) NOT NULL,
@@ -27,10 +29,10 @@ CREATE TABLE IF NOT EXISTS dams (
     outflow DECIMAL(10, 2)
 );
 
-
+-- Create precipitation table
 CREATE TABLE IF NOT EXISTS precipitation (
-    precipitation_ida UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    cumulitive_monthly_rainfall DECIMAL(10, 2),
+    precipitation_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    cumulative_monthly_rainfall DECIMAL(10, 2),
     daily_rainfall DECIMAL(10, 2)
 );
 
