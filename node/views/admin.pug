@@ -15,17 +15,61 @@ html(lang="en")
           form(action="/logout", method="POST")
             button(type="submit") Logout
 
-
     .container
       h1 Admin Dashboard
-      p Welcome, Admin! Manage your application here.
+      p Welcome, Admin! Manage your data here.
 
+      // ADD DATA SECTION
       section.admin-section
-        h2 User Management
-        p View and manage users here.
-        //- Add your user management features later
+        h2 Add Data
+        form(action="/admin/add-data", method="POST", enctype="multipart/form-data")
+          label(for="csvFile") Upload CSV file:
+          input(type="file", name="csvFile", id="csvFile", accept=".csv", required)
 
+          label(for="datePeriod") Select Date Period:
+          input(type="date", name="datePeriod", id="datePeriod", required)
+
+          button(type="submit") Add Data
+
+      // REMOVE DATA SECTION
       section.admin-section
-        h2 Reports
-        p View system reports and logs here.
-        //- Add reports or analytics features here
+        h2 Remove Data
+        form(action="/admin/remove-data", method="POST")
+          label(for="referenceNumber") Reference Number:
+          select(name="referenceNumber", id="referenceNumber")
+            option(value="") -- Select Reference Number --
+            each river in riverData
+              option(value=river.river_id) #{river.river_id} - #{river.station} #{river.date} #{river.time}
+
+          p OR
+
+          label(for="removeDatePeriod") Select Date Period:
+          input(type="date", name="removeDatePeriod", id="removeDatePeriod")
+
+          button(type="submit") Remove Data
+
+      // TABLE OF EXISTING RIVER DATA
+      section.admin-section
+        h2 Current River Data
+        if riverData.length > 0
+          table
+            thead
+              tr
+                th River ID
+                th Station
+                th Date
+                th Time
+                th Level
+                th Flow
+            tbody
+              each river in riverData
+                tr
+                  td= river.river_id
+                  td= river.station
+                  td= river.date
+                  td= river.time
+                  td= river.level
+                  td= river.flow
+        else
+          p No river data found.
+
