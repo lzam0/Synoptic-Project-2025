@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS dams (
 
 
 CREATE TABLE IF NOT EXISTS precipitation (
-    precipitation_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    precipitation_ida UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     cumulitive_monthly_rainfall DECIMAL(10, 2),
     daily_rainfall DECIMAL(10, 2)
 );
