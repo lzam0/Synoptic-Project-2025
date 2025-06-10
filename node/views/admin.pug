@@ -5,6 +5,13 @@ html(lang="en")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Admin Dashboard
     link(rel="stylesheet", href="/css/style.css")
+    style.
+      #google_translate_element {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 9999;
+      }
   body
     nav.navbar
       a.navbar-brand(href="/") MyApp
@@ -14,6 +21,18 @@ html(lang="en")
         li
           form(action="/logout", method="POST")
             button(type="submit") Logout
+
+    // Google Translate dropdown
+    div#google_translate_element
+    script(src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit")
+    script.
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          includedLanguages: 'en,fr,de,es,zh-CN,ar,ru',
+          layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+        }, 'google_translate_element');
+      }
 
     .container
       h1 Admin Dashboard
@@ -39,7 +58,7 @@ html(lang="en")
           select(name="referenceNumber", id="referenceNumber")
             option(value="") -- Select Reference Number --
             each river in riverData
-              option(value=river.river_id) #{river.river_id} - #{river.station} #{river.date} #{river.time}
+              option(value=river.river_id) #{river.river_id} - #{river.station} #{river.formatted_date} #{river.time}
 
           p OR
 
@@ -52,6 +71,8 @@ html(lang="en")
       section.admin-section
         h2 Current River Data
         if riverData.length > 0
+          - const formatTime = time => time.slice(0,5);
+
           table
             thead
               tr
@@ -66,10 +87,16 @@ html(lang="en")
                 tr
                   td= river.river_id
                   td= river.station
-                  td= river.date
-                  td= river.time
-                  td= river.level
+                  td= river.formatted_date    
+                  td= formatTime(river.time)   
                   td= river.flow
         else
           p No river data found.
 
+    // Optional — re-trigger Google Translate after load
+    script.
+      window.addEventListener('load', function() {
+        if (typeof googleTranslateElementInit === 'function') {
+          googleTranslateElementInit();
+        }
+      });

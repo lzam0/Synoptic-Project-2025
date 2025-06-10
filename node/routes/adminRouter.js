@@ -14,7 +14,21 @@ const upload = multer({
 
 router.get('/admin', authenticateToken, async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM river ORDER BY date DESC LIMIT 100');
+    const result = await pool.query(`
+      SELECT 
+        river_id, 
+        station, 
+        location, 
+        year, 
+        to_char(date, 'YYYY-MM-DD') AS formatted_date, 
+        time, 
+        level, 
+        flow
+      FROM river
+      ORDER BY date DESC
+      LIMIT 100
+    `);
+
     res.render('admin', { user: req.user, riverData: result.rows });
   } catch (err) {
     console.error('Error fetching river data:', err);
