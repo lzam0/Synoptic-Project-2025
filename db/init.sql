@@ -11,9 +11,13 @@ CREATE TABLE IF NOT EXISTS "users" (
 
 CREATE TABLE IF NOT EXISTS river (
     river_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    river_name VARCHAR(255) NOT NULL,
-    volume DECIMAL(10, 2),
-    flow DECIMAL(10, 2)
+    station VARCHAR(255),
+    location VARCHAR(255),
+    year INT NOT NULL,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    level DECIMAL(10, 3),   
+    flow DECIMAL(10, 3), 
 );
 
 CREATE TABLE IF NOT EXISTS dams (
@@ -41,5 +45,5 @@ VALUES (
     uuid_generate_v4(),
     'parkflow113@gmail.com',
     'dataflow',
-    '$2b$10$vMw5XNphBJDUy1avQJbjeO8vCIi4/KlRRJ/pfretvAXkU2AQyIaYy'
+    '$2b$10$vMw5XNphBJDUy1avQJbjeO8vCIi4/KlRRJ/pfretvAXkU2AQyIaYy' -- pass 123
 );
