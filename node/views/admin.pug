@@ -5,13 +5,6 @@ html(lang="en")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Admin Dashboard
     link(rel="stylesheet", href="/css/style.css")
-    style.
-      #google_translate_element {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        z-index: 9999;
-      }
   body
     nav.navbar
       a.navbar-brand(href="/") MyApp
@@ -22,21 +15,9 @@ html(lang="en")
           form(action="/logout", method="POST")
             button(type="submit") Logout
 
-    // Google Translate dropdown
-    div#google_translate_element
-    script(src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit")
-    script.
-      function googleTranslateElementInit() {
-        new google.translate.TranslateElement({
-          pageLanguage: 'en',
-          includedLanguages: 'en,fr,de,es,zh-CN,ar,ru',
-          layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
-        }, 'google_translate_element');
-      }
-
     .container
       h1 Admin Dashboard
-      p Welcome, this is the admin dashboard where you can manage river data.
+      p Welcome, Admin! Manage your data here.
 
       // ADD DATA SECTION
       section.admin-section
@@ -89,14 +70,7 @@ html(lang="en")
                   td= river.station
                   td= river.formatted_date    
                   td= formatTime(river.time)   
+                  td= river.level
                   td= river.flow
         else
           p No river data found.
-
-    // Optional — re-trigger Google Translate after load
-    script.
-      window.addEventListener('load', function() {
-        if (typeof googleTranslateElementInit === 'function') {
-          googleTranslateElementInit();
-        }
-      });
