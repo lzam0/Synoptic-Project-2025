@@ -35,6 +35,11 @@ app.get('/', (req, res) => {
 app.use('/', authRoutes);
 app.use('/', adminRouter);
 
+// Parse CSV files on server start up
+if (process.env.IMPORT_CSV_ON_START === 'true') {
+  require('./parser/riverParser');
+}
+
 // Start the server
 const server = app.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port} 🚀`);

@@ -1,13 +1,13 @@
--- Extension to generate unique IDs
+-- Enable extension to generate UUIDs
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Create users table
-CREATE TABLE IF NOT EXISTS "users" (
+CREATE TABLE IF NOT EXISTS users (
     user_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     username VARCHAR(50) UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
     station_id UUID,
-    place VARCHAR(255),
+    place VARCHAR(255)
 );
 
 -- Create river table
@@ -38,15 +38,17 @@ CREATE TABLE IF NOT EXISTS precipitation (
 );
 
 -- Insert admin account
-INSERT INTO "users" (
+INSERT INTO users (
     user_id,
-    email,
     username,
-    password_hash 
+    password_hash,
+    station_id,
+    place
 )
 VALUES (
     uuid_generate_v4(),
-    'parkflow113@gmail.com',
     'dataflow',
-    '$2b$10$vMw5XNphBJDUy1avQJbjeO8vCIi4/KlRRJ/pfretvAXkU2AQyIaYy' -- pass 123
+    '$2b$10$vMw5XNphBJDUy1avQJbjeO8vCIi4/KlRRJ/pfretvAXkU2AQyIaYy', -- pass: 123
+    uuid_generate_v4(), -- generate a UUID instead of using 'UEA'
+    'Norwich'
 );
