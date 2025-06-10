@@ -9,6 +9,27 @@ CREATE TABLE IF NOT EXISTS "users" (
     password_hash TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS river (
+    river_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    river_name VARCHAR(255) NOT NULL,
+    volume DECIMAL(10, 2),
+    flow DECIMAL(10, 2)
+);
+
+CREATE TABLE IF NOT EXISTS dams (
+    dams_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    dam_name VARCHAR(255) NOT NULL,
+    capacity DECIMAL(10, 2),
+    outflow DECIMAL(10, 2)
+);
+
+
+CREATE TABLE IF NOT EXISTS precipitation (
+    precipitation_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    cumulitive_monthly_rainfall DECIMAL(10, 2),
+    daily_rainfall DECIMAL(10, 2)
+);
+
 -- Insert admin account
 INSERT INTO "users" (
     user_id,
