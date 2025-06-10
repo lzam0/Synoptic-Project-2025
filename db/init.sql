@@ -4,9 +4,10 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- Create users table
 CREATE TABLE IF NOT EXISTS "users" (
     user_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    email VARCHAR(100) UNIQUE NOT NULL,
     username VARCHAR(50) UNIQUE NOT NULL,
-    password_hash TEXT NOT NULL
+    password_hash TEXT NOT NULL,
+    station_id UUID,
+    place VARCHAR(255),
 );
 
 -- Create river table
