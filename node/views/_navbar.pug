@@ -26,3 +26,15 @@
       li.nav-item
         form.d-flex(action="/logout", method="POST")
           button.btn.btn-outline-danger(type="submit") Logout
+
+// This script toggles the mobile navigation menu when the burger icon is clicked.
+script.
+  const burger = document.getElementById('burger');
+  const mobileNav = document.getElementById('mobileNav');
+  burger.addEventListener('click', () => {
+    mobileNav.classList.toggle('open');
+  });
+  // Optional: close menu when clicking a link
+  mobileNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => mobileNav.classList.remove('open'));
+  });
