@@ -27,7 +27,7 @@ async function parseCSVFile(filePath) {
 
   const lines = fs.readFileSync(filePath, 'utf-8').split('\n');
 
-  // Try to find station and location info before "Hydro" header
+ // Try to find station and location info before "Hydro" header
   for (let i = 0; i < lines.length; i++) {
     if (lines[i].trim().match(/^Hydro/i)) {
       for (let j = i - 1; j >= 0; j--) {
