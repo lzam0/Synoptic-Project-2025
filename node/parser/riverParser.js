@@ -11,12 +11,12 @@ const DATA_FOLDER = path.join(__dirname, '../../data');
 
 async function parseCSVFile(filePath) {
   const client = new Client({
-    user: pool.user,
-    host: pool.host,
-    database: pool.database,
-    password: pool.password,
-    port: pool.port,
-  });
+  user: process.env.PGUSER,
+  host: process.env.PGHOST,
+  database: process.env.PGDATABASE,
+  password: process.env.PGPASSWORD,
+  port: process.env.PGPORT,
+});
 
   await client.connect();
 
@@ -129,7 +129,4 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error('Unhandled error:', err);
-  process.exit(1);
-});
+module.exports = parseCSVFile;
