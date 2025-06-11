@@ -28,7 +28,6 @@ router.get('/admin', authenticateToken, async (req, res) => {
         flow
       FROM river
       ORDER BY date DESC
-      LIMIT 100
     `);
 
     res.render('admin', { user: req.user, riverData: result.rows });

@@ -7,14 +7,13 @@ const pool = require('../db'); // IMPORTANT: Correct path to db.js from routes/d
 const stationMapping = {
   'A5H006YRPK': 'A5H006', // Limpopo River Station
   'D1H003YRPK': 'D1H003', // Orange River Station
-  // Add more mappings here if you have more data visualization links
+  'B1H001YRPK': 'B1H001',
 };
 
-// --- Human-readable River Names for Display ---
 const displayRiverNames = {
   'A5H006': 'Limpopo River',
   'D1H003': 'Orange River',
-  // Add more station to river name mappings for display purposes
+  'B1H001': 'Olifants River @ Mooifontein',
 };
 
 /**
@@ -32,8 +31,6 @@ router.get('/data-visualisation', (req, res) => {
 
 /**
  * Route for displaying data visualizations for a specific river.
- * Fetches data from the PostgreSQL database based on the file code.
- * The ':fileCode' URL parameter (e.g., 'A5H006YRPK') is mapped to a station name.
  */
 router.get('/data-visualisation/:fileCode', async (req, res) => {
   const requestedFileCode = req.params.fileCode.toUpperCase();
@@ -90,7 +87,7 @@ router.get('/data-visualisation/:fileCode', async (req, res) => {
     res.render('data-visualisation', {
       title: `Data Visualization for ${riverName}`, // Page title
       file: requestedFileCode, // The URL code, might be useful
-      riverName, // Human-readable name
+      riverName, // river name for display
       stationName, // Database station name
       data: dataForRiver, // The actual raw data to be displayed
       selectedRiverCode: requestedFileCode // Indicates a river has been selected

@@ -1,15 +1,15 @@
 D1H003  XYZ DummyRiver,,,,
 Hydro ,,,,
 Year, Date, Time, Level, Flow
-2026,20260408, 16:44,  2.495, 1702.700,
-
-
-Explanation of codes:
-
-$ ...  Gauge Plate Readings
-A ...  Above Rating
-E ...  Estimated Data
-M ...  Missing Data
-Q ...  Data Not Audited
-S ...  Gap filled data
-Z ...  No info for stage/disch determination
+2026,20260408, 16:44,2.495,1702.7
+,,,,
+,,,,
+Explanation of codes:,,,,
+,,,,
+$ ...  Gauge Plate Readings,,,,
+A ...  Above Rating,,,,
+E ...  Estimated Data,,,,
+M ...  Missing Data,,,,
+Q ...  Data Not Audited,,,,
+S ...  Gap filled data,,,,
+Z ...  No info for stage/disch determination,,,,
