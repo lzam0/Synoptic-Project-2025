@@ -5,6 +5,8 @@ html(lang="en")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Admin Dashboard
     link(rel="stylesheet", href="/css/style.css")
+    // Link to Bootstrap CSS for styling and responsiveness
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
     style.
       #google_translate_element {
         position: absolute;
@@ -24,81 +26,77 @@ html(lang="en")
           layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
         }, 'google_translate_element');
       }
-  
-    nav.navbar
-      a.navbar-brand(href="/") MyApp
-      ul.nav-links
-        li: a(href="/") Home
-        li: a(href="/admin") Admin
-        li
-          form(action="/logout", method="POST")
-            button(type="submit") Logout
 
-    .container
-      h1 Admin Dashboard
-      p Welcome, Admin! Manage your data here.
+    // Include the shared navigation bar component
+    include _navbar.pug
+
+    .container.mt-5
+      h1.text-center.mb-4 Admin Dashboard
+      p.lead.text-center Welcome, Admin! Manage your data here.
 
       // ADD DATA SECTION
-      section.admin-section
-        h2 Add Data
+      section.admin-section.mb-4.p-4.border.rounded.shadow-sm
+        h2.mb-3 Add Data
         form(action="/admin/add-data", method="POST", enctype="multipart/form-data")
-          label(for="csvFile") Upload CSV file:
-          input(type="file", name="csvFile", id="csvFile", accept=".csv", required)
-
-          label(for="datePeriod") Select Date Period:
-          input(type="date", name="datePeriod", id="datePeriod", required)
-
-          button(type="submit") Add Data
+          .mb-3
+            label.form-label(for="csvFile") Upload CSV file:
+            input.form-control(type="file", name="csvFile", id="csvFile", accept=".csv", required)
+          .mb-3
+            label.form-label(for="datePeriod") Select Date Period (Optional, for reference):
+            input.form-control(type="date", name="datePeriod", id="datePeriod")
+          button.btn.btn-primary(type="submit") Add Data
 
       // REMOVE DATA SECTION
-      section.admin-section
-        h2 Remove Data
+      section.admin-section.mb-4.p-4.border.rounded.shadow-sm
+        h2.mb-3 Remove Data
         form(action="/admin/remove-data", method="POST")
-          label(for="referenceNumber") Reference Number:
-          select(name="referenceNumber", id="referenceNumber")
-            option(value="") -- Select Reference Number --
-            each river in riverData
-              option(value=river.river_id) #{river.river_id} - #{river.station} #{river.formatted_date} #{river.time}
-
-          p OR
-
-          label(for="removeDatePeriod") Select Date Period:
-          input(type="date", name="removeDatePeriod", id="removeDatePeriod")
-
-          button(type="submit") Remove Data
+          .mb-3
+            label.form-label(for="referenceNumber") Reference Number:
+            select.form-select(name="referenceNumber", id="referenceNumber")
+              option(value="") -- Select Reference Number --
+              each river in riverData
+                option(value=river.river_id) #{river.river_id} - #{river.station} #{river.formatted_date} #{river.time}
+          p.text-center OR
+          .mb-3
+            label.form-label(for="removeDatePeriod") Select Date Period:
+            input.form-control(type="date", name="removeDatePeriod", id="removeDatePeriod")
+          button.btn.btn-danger(type="submit") Remove Data
 
       // TABLE OF EXISTING RIVER DATA
-      section.admin-section
-        h2 Current River Data
+      section.admin-section.mb-4.p-4.border.rounded.shadow-sm
+        h2.mb-3 Current River Data
         if riverData.length > 0
-          - const formatTime = time => time.slice(0,5);
+          - const formatTime = time => time.slice(0,5); // Helper function for time formatting
 
-          table
-            thead
-              tr
-                th River ID
-                th Station
-                th Date
-                th Time
-                th Level
-                th Flow
-            tbody
-              each river in riverData
+          .table-responsive
+            table.table.table-striped.table-hover.table-bordered
+              thead.table-dark
                 tr
-                  td= river.river_id
-                  td= river.station
-                  td= river.formatted_date    
-                  td= formatTime(river.time)   
-                  td= river.level
-                  td= river.flow
+                  th River ID
+                  th Station
+                  th Date
+                  th Time
+                  th Level
+                  th Flow
+              tbody
+                each river in riverData
+                  tr
+                    td= river.river_id
+                    td= river.station
+                    td= river.formatted_date
+                    td= formatTime(river.time)
+                    td= river.level
+                    td= river.flow
         else
-          p No river data found.
+          p.text-center No river data found.
 
-
-          // retrigger the Google Translate after the page loads
+    // retrigger the Google Translate after the page loads
     script.
       window.addEventListener('load', function() {
         if (typeof googleTranslateElementInit === 'function') {
           googleTranslateElementInit();
         }
       });
+
+    // Link to Bootstrap Bundle JS for dropdowns and other interactive components
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js')

@@ -5,13 +5,8 @@ html(lang="en")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Login
     link(rel="stylesheet", href="/css/style.css")
-    style.
-      #google_translate_element {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        z-index: 9999;
-      }
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+
   body
     // Google Translate dropdown
     div#google_translate_element
@@ -24,6 +19,9 @@ html(lang="en")
           layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
         }, 'google_translate_element');
       }
+
+    // Include the shared navigation bar component
+    include _navbar.pug
 
     .login-container
       h2 Login
