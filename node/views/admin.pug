@@ -18,7 +18,7 @@ html(lang="en")
       h1.text-center.mb-4 Admin Dashboard
       p.lead.text-center Welcome, Admin! Manage your data here.
 
-      // ADD DATA SECTION
+      // Add Data Section
       section.admin-section.mb-4.p-4.border.rounded.shadow-sm
         h2.mb-3 Add Data
         form(action="/admin/add-data", method="POST", enctype="multipart/form-data")
@@ -30,7 +30,7 @@ html(lang="en")
             input.form-control(type="date", name="datePeriod", id="datePeriod")
           button.btn.btn-primary(type="submit") Add Data
 
-      // REMOVE DATA SECTION
+      // Remove Data Section
       section.admin-section.mb-4.p-4.border.rounded.shadow-sm
         h2.mb-3 Remove Data
         form(action="/admin/remove-data", method="POST")
@@ -46,7 +46,7 @@ html(lang="en")
             input.form-control(type="date", name="removeDatePeriod", id="removeDatePeriod")
           button.btn.btn-danger(type="submit") Remove Data
 
-      // TABLE OF EXISTING RIVER DATA
+      // Existing River Data Section
       section.admin-section.mb-4.p-4.border.rounded.shadow-sm
         h2.mb-3 Current River Data
         if riverData.length > 0
@@ -71,6 +71,11 @@ html(lang="en")
                     td= formatTime(river.time)
                     td= river.level
                     td= river.flow
+
+          // Download button for CSV export
+          .mt-3.text-center
+            a.btn.btn-success(href="/admin/export-data") Download CSV
+
         else
           p.text-center No river data found.
 
@@ -79,4 +84,5 @@ html(lang="en")
 
     // Link to Bootstrap Bundle JS for dropdowns and other interactive components
     include _bootstrap.pug
+
 
