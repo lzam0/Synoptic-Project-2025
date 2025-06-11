@@ -44,7 +44,7 @@ app.use('/', infoRoutes);
 
 // Public Routes
 app.use((req, res, next) => {
-  const publicPaths = ['/login', '/register', '/', '/data-visualisation'];
+  const publicPaths = ['/login', '/register', '/', '/data-visualisation', '/information'];
   
   if (publicPaths.some(pathPrefix => req.path.startsWith(pathPrefix))) {
     return next();
