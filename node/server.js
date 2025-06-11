@@ -21,12 +21,12 @@ require('dotenv').config();
 // Get the port from environment variables, or default to 3000
 const port = process.env.PORT || 3000;
 
-// Set views directory. CORRECTED: views/ is directly inside node/
+// Set views directory. views/ is directly inside node/
 app.set("views", path.join(__dirname, 'views'));
 app.set("view engine", "pug");
 
 // Serve static files from the 'public' directory.
-// CORRECTED: 'public/' is directly inside 'node/' as per screenshot.
+// This assumes 'public/' is directly inside 'node/' (sibling to server.js).
 app.use(express.static(path.join(__dirname, 'public')));
 // Serve uploaded files.
 // ASSUMPTION: 'uploads/' is in the project root, one level up from 'node/'.
@@ -45,7 +45,7 @@ app.use(cookieParser());
 app.get('/', (req, res) => {
   res.render('index');
 });
-app.use('/', authRoutes); // This typically includes /login, /register, POST /login, POST /register
+app.use('/', authRoutes);
 
 /**
  * Route for the initial Data Visualisation page load (no specific river selected).
@@ -86,7 +86,6 @@ app.get('/data-visualisation/:fileCode', async (req, res) => {
   // Check if a valid station mapping exists
   if (!stationName) {
     console.warn(`Server: No station mapping found for file code: ${requestedFileCode}`);
-    // IMPORTANT: Render an error, do NOT redirect to avoid loops.
     return res.status(404).render('error', { message: 'Data visualization not found for this river code.' });
   }
 
@@ -95,8 +94,6 @@ app.get('/data-visualisation/:fileCode', async (req, res) => {
     client = await pool.connect();
     console.log('Server: Database client connected for data fetch.');
 
-    // Query the database to get all relevant columns for charting and table display.
-    // Includes 'year' for client-side yearly aggregation.
     const result = await client.query(
       `SELECT
          station,
@@ -114,22 +111,19 @@ app.get('/data-visualisation/:fileCode', async (req, res) => {
     const dataForRiver = result.rows;
     console.log(`Server: Fetched ${dataForRiver.length} rows for station: ${stationName}`);
 
-    // If no data is found for the station, render a message, do NOT redirect.
     if (dataForRiver.length === 0) {
       console.warn(`Server: No data found in the database for station: ${stationName}`);
       return res.render('data-visualisation', {
         title: `Data Visualization for ${displayRiverNames[stationName] || stationName}`,
         riverName: displayRiverNames[stationName] || stationName,
         stationName: stationName,
-        data: [], // Pass an empty array to show "No Data Found" message in Pug
+        data: [],
         selectedRiverCode: requestedFileCode
       });
     }
 
-    // Determine the human-readable river name for the page title and chart titles
     const riverName = displayRiverNames[stationName] || stationName;
 
-    // Render the 'data-visualisation.pug' template, passing all necessary data.
     res.render('data-visualisation', {
       title: `Data Visualization for ${riverName}`,
       file: requestedFileCode,
@@ -151,12 +145,8 @@ app.get('/data-visualisation/:fileCode', async (req, res) => {
 
 
 // --- GLOBAL AUTHENTICATION MIDDLEWARE ---
-// This middleware will run for ALL routes defined AFTER it,
-// unless explicitly excluded or handled within the middleware itself.
-// To prevent redirect loops, we'll implement a check to skip it for public paths.
 app.use((req, res, next) => {
   // Define paths that should NOT trigger authentication redirects
-  // Added data-visualisation paths here
   const publicPaths = ['/login', '/register', '/', '/data-visualisation'];
 
   // If the requested path starts with one of the public paths, skip authentication.
@@ -164,21 +154,18 @@ app.use((req, res, next) => {
   if (publicPaths.some(pathPrefix => req.path.startsWith(pathPrefix))) {
     return next();
   }
-  // Otherwise, proceed with the authentication token check
   authenticateToken(req, res, next);
 });
 
 
-// Middleware to expose req.user to res.locals (available to all Pug templates after successful authentication)
-// This will only run IF authentication has succeeded, or if the path was public and skipped auth.
+// Middleware to expose req.user to res.locals
 app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
 });
 
 // --- PROTECTED ROUTES (THESE WILL NOW REQUIRE AUTHENTICATION) ---
-// These routes will only be accessible if authentication passes.
-app.use('/', adminRouter); // Admin routes are protected
+app.use('/', adminRouter);
 
 
 // Start the Express server
