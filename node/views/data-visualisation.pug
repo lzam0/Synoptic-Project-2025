@@ -1,0 +1,118 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Data Visualization for #{riverName ? riverName : 'River Data'}
+    // Link to Bootstrap CSS for styling and responsiveness
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    // Link to your custom CSS file for site-wide styling (ensure this path is correct if you have one)
+    link(rel="stylesheet", href="/css/style.css")
+
+    // --- Chart.js and its Time Adapter Libraries (CRITICAL FOR GRAPHS) ---
+    // Chart.js Core Library (v3.x or compatible)
+    script(src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js")
+    // Moment.js (REQUIRED by chartjs-adapter-moment for time scales, even if using 'category' for years)
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js")
+    // Chart.js Adapter for Moment.js (Crucial for displaying time on X-axis, depends on Moment.js)
+    script(src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0/dist/chartjs-adapter-moment.min.js")
+
+    // Inline style for Google Translate dropdown positioning
+    style.
+      #google_translate_element {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 9999;
+      }
+  body
+    // Google Translate dropdown div
+    div#google_translate_element
+    // Google Translate external script
+    script(src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit")
+    // Google Translate initialization function
+    script.
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          includedLanguages: 'en,fr,de,es,zh-CN,ar,ru,af,zu', // Languages to include in the dropdown
+          layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+        }, 'google_translate_element');
+      }
+
+    // Include the shared navigation bar component
+    include _navbar.pug
+
+    .container.mt-5
+      h1.text-center.mb-4 Data Visualization
+
+      // Conditional content based on whether a river has been selected AND data is available
+      if data && data.length > 0
+        // Display river-specific title if data is present
+        h2.text-center.mb-4 #{riverName} Data Overview
+
+        // Row for the charts, optimized for responsiveness
+        .row.justify-content-center
+          .col-lg-10.col-md-12.mb-4
+            .card.shadow-sm.border-primary
+              .card-header.bg-primary.text-white.py-3
+                h3.mb-0.text-center Average Level and Flow per Year
+              .card-body.p-4
+                // Canvas element for the line chart (Level and Flow)
+                canvas#myChart(width='800' height='400')
+
+          .col-lg-10.col-md-12.mb-4
+            .card.shadow-sm.border-success
+              .card-header.bg-success.text-white.py-3
+                h3.mb-0.text-center Average Flow per Year (Bar Chart)
+              .card-body.p-4
+                // Canvas element for the bar chart (Flow)
+                canvas#barChart(width='800' height='400')
+
+          .col-lg-10.col-md-12.mb-4
+            // Container for the data table, which will be rendered dynamically by charts.js
+            div#dataTableContainer
+
+        // Pass the raw data from the server (fetched from DB) and other info to the client-side JavaScript.
+        // This script block is only rendered if 'data' is available, preventing errors on initial load.
+        script.
+          window.rawData = !{JSON.stringify(data)};
+          window.stationName = "#{stationName}"; // Pass station name for chart titles
+          window.riverName = "#{riverName}";     // Pass river display name for chart titles
+        // Link to your custom JavaScript file containing Chart.js logic.
+        // This must be placed AFTER the Chart.js core and adapter libraries, and after window.rawData assignment.
+        script(src='/js/chart.js')
+
+      else if selectedRiverCode
+        // Message if a river was selected but no data was found (e.g., database empty for that station)
+        .alert.alert-warning.text-center.mt-5(role="alert")
+          h4.alert-heading No Data Found!
+          p It looks like there's no historical data available for the selected river station yet.
+          hr
+          p.mb-0 Please ensure data is uploaded for this station in the admin panel or try another river.
+          .d-grid.gap-2.col-md-6.mx-auto.mt-4
+            // Button to go back to initial selection or try again
+            a.btn.btn-outline-secondary.btn-lg(href='/data-visualisation') Select Another River
+
+      else
+        // Display selection options if no river data is currently loaded (initial page visit)
+        .text-center.mt-5
+          h2 Please select a river to view its data visualizations.
+          p Choose from the options below to see historical water level and flow data.
+          .d-grid.gap-2.col-md-6.mx-auto.mt-4
+            // Buttons to select a river.
+            // These link to /data-visualisation/:fileCode routes.
+            a.btn.btn-outline-primary.btn-lg(href='/data-visualisation/A5H006YRPK') View Limpopo River Data
+            // CHANGED: From btn.success.btn-lg to btn-outline-success.btn-lg
+            a.btn.btn-outline-success.btn-lg(href='/data-visualisation/D1H003YRPK') View Orange River Data
+
+    // Link to Bootstrap Bundle JS for dropdowns and other interactive components
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js')
+
+    // Retrigger the Google Translate after the page loads
+    script.
+      window.addEventListener('load', function() {
+        if (typeof googleTranslateElementInit === 'function') {
+          googleTranslateElementInit();
+        }
+      });
