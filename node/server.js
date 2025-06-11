@@ -7,6 +7,7 @@ const app = express();
 
 const authRoutes = require('./routes/authRouter');
 const adminRouter = require('./routes/adminRouter');
+const infoRouter = require('./routes/infoRouter');
 
 // Load environment variables from the .env file
 require('dotenv').config();
@@ -34,6 +35,7 @@ app.get('/', (req, res) => {
 
 app.use('/', authRoutes);
 app.use('/', adminRouter);
+app.use('/', infoRouter);
 
 // Parse CSV files on server start up
 if (process.env.IMPORT_CSV_ON_START === 'true') {

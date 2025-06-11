@@ -1,0 +1,227 @@
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Reports Website
+    link(rel="stylesheet", href="/css/css")
+    style.
+      body {
+        background: #fff;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+      }
+      .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 3rem 1.5rem 2rem;
+        border-bottom: 1px solid #eee;
+        background: #fff;
+      }
+      .navbar .logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .navbar .logo-square {
+        width: 48px;
+        height: 48px;
+        background: #ddd;
+        border-radius: 6px;
+      }
+      .navbar .nav-links {
+        display: flex;
+        gap: 2.5rem;
+      }
+      .navbar .nav-links a {
+        color: #222;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1.1rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 6px;
+        transition: background 0.2s;
+      }
+      .navbar .nav-links a:hover {
+        background: #f5f5f5;
+      }
+      .container {
+        display: flex;
+        max-width: 1400px;
+        margin: 2rem auto;
+        gap: 2.5rem;
+        padding: 0 2rem;
+      }
+      .sidebar {
+        width: 270px;
+        flex-shrink: 0;
+      }
+      .sidebar h3 {
+        margin-top: 0;
+        font-size: 1.2rem;
+        margin-bottom: 1.2rem;
+      }
+      .sidebar-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+      .sidebar-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background: #f7f7f7;
+        border-radius: 8px;
+        padding: 0.7rem 0.7rem 0.7rem 0.7rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .sidebar-item:hover {
+        background: #eaeaea;
+      }
+      .sidebar-thumb {
+        width: 56px;
+        height: 56px;
+        object-fit: cover;
+        border-radius: 6px;
+        background: #ddd;
+      }
+      .sidebar-info {
+        display: flex;
+        flex-direction: column;
+      }
+      .sidebar-title {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 0.2rem;
+      }
+      .sidebar-author {
+        font-size: 0.92rem;
+        color: #888;
+      }
+      .main-content {
+        flex: 1;
+        max-width: 900px;
+      }
+      .main-content h1 {
+        font-size: 2.4rem;
+        font-weight: 700;
+        margin-bottom: 0.7rem;
+      }
+      .main-content h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+      .main-content .subheading {
+        color: #666;
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+      }
+      .main-content .main-img {
+        width: 100%;
+        max-width: 700px;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        object-fit: cover;
+        background: #eee;
+        height: 320px;
+        display: block;
+      }
+      .main-content p {
+        margin-bottom: 1.3rem;
+        color: #222;
+        font-size: 1.05rem;
+        line-height: 1.7;
+      }
+      .main-content .inline-img {
+        width: 340px;
+        border-radius: 10px;
+        margin: 2rem 0;
+        object-fit: cover;
+        background: #eee;
+        height: 180px;
+        display: block;
+      }
+      .related-section {
+        margin-top: 3.5rem;
+      }
+      .related-section h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1.2rem;
+      }
+      .related-list {
+        display: flex;
+        gap: 2.5rem;
+      }
+      .related-item {
+        width: 220px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .related-thumb {
+        width: 100%;
+        height: 120px;
+        border-radius: 8px;
+        object-fit: cover;
+        background: #ddd;
+      }
+      .related-title {
+        font-weight: 600;
+        font-size: 1rem;
+      }
+      .related-author {
+        font-size: 0.93rem;
+        color: #888;
+      }
+      .footer {
+        margin-top: 4rem;
+        padding: 2.5rem 0 1.5rem 0;
+        border-top: 1px solid #eee;
+        text-align: center;
+        color: #888;
+        font-size: 1rem;
+      }
+  body
+    .navbar
+      .logo
+        img(src="/logo.png", alt="Logo", style="height:48px; width:48px; border-radius:6px;")
+        span(style="margin-left:0.7rem; font-weight:600; font-size:1.1rem;") DataFlow
+      .nav-links
+        a(href="/") Home
+        a(href="/login") Login
+        a(href="/data") Data
+        a(href="/information") Information
+    .container
+      .sidebar
+        h3 Other Articles & Reports
+        .sidebar-list
+          each val, i in [1,2,3,4]
+            .sidebar-item
+              img.sidebar-thumb(src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80", alt="thumb")
+              .sidebar-info
+                .sidebar-title Article #{i}
+                .sidebar-author Author Name
+      .main-content
+        h1 Educational Page
+        h2 Report / Article Title
+        .subheading Subheading that sets up context, shares more info about the author, or generally gets people psyched to keep reading
+        img.main-img(src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=800&q=80", alt="main")
+        p Body text for your whole article or post. We'll put in some lorem ipsum to show how a filled-out page might look:
+        p Excepteur efficient emerging, minim veniam amin aute carefully curated Ginza conversation exquisite perfect nostrud nisi intricate Content. Qui international first-class nulla ut. Punctual adipisicing, essential lovely queen tempor eiusmod irure. Exclusive izakaya charming Scandinavian impeccable aute quality of life soft power pariatur Melbourne occaecat discerning. Qui wardrobe aliquip, et Porter destination Toto remarkable officia Helsinki excepteur Basset hound. Zürich sleepy perfect consectetur.
+        p Exquisite sophisticated iconic cutting-edge laborum deserunt Addis Ababa esse bureaux cupidatat id minim. Sharp classic the best commodo nostrud delightful. Conversation aute Rochester id. Qui sunt remarkable deserunt intricate airport handsome K-pop excepteur classic esse Asia-Pacific laboris.
+        img.inline-img(src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80", alt="inline")
+        p Excepteur efficient emerging, minim veniam amin cloying aute carefully curated gauche. Espresso exquisite perfect nostrud nisi intricate Content. Punctual adipisicing Borzoi, essential lovely tempor eiusmod irure. Exclusive izakaya charming Quezon City impeccable aute quality of life soft power pariatur occaecat discerning. Qui wardrobe aliquip, et Amadeus rock opera.
+        p Exquisite sophisticated iconic cutting-edge laborum deserunt esse bureaux cupidatat id minim. Sharp classic the best commodo nostrud delightful. Conversation aute wifey id. Qui sunt remarkable deserunt intricate airport excepteur classic esse riot girl.
+        .related-section
+          h2 Related articles or posts
+          .related-list
+            each val, i in [1,2,3]
+              .related-item
+                img.related-thumb(src="https://images.unsplash.com/photo-1465101178521-c1a9136a3b43?auto=format&fit=crop&w=400&q=80", alt="related")
+                .related-title Title
+                .related-author Author
+    .footer
+      | © 2025 DataFlow &mdash; Reports Website Example
