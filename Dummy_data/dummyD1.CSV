@@ -1,11 +1,6 @@
-Department of Water and Sanitation          SAFMAXLEVELFLOW Output 2025/05/10 22:47
-
-Yearly Maximum Values for Hydrological Years  ordered by  DATE
-
-D1H003   Orange River @ Aliwal-North
-
-Hydro,,MAX,MAX,MAX
-Year,Date,Time,Level (m),Flow (cumec)
+D1H003  XYZ DummyRiver,,,,
+Hydro ,,,,
+Year, Date, Time, Level, Flow
 2026,20260408, 16:44,  2.495, 1702.700,
 
 
