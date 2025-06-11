@@ -67,10 +67,21 @@ if (process.env.IMPORT_CSV_ON_START === 'true') {
 }
 
 // Start the server
+let server;
+
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(port, () => {
+  server = app.listen(port, () => {
     console.log(`🚀 Server running at http://localhost:${port} 🚀`);
+  });
+
+  process.on('SIGINT', () => {
+    console.log('SIGINT received: closing server');
+    server.close(() => {
+      console.log('Server closed');
+      process.exit(0);
+    });
   });
 }
 
-module.exports = app;
+module.exports = { app, server };
+
