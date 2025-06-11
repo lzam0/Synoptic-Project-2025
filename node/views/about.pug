@@ -15,23 +15,49 @@ html(lang="en")
     // Include the shared navigation bar component
     include _navbar.pug
 
+    .container 
+      img.img-fluid.mx-auto.mt-5.mb-3(src="/images/uealogo.png", alt="University of East Anglia Logo" width="20%")
+      img.img-fluid.mx-auto.mt-5.mb-3(src="/images/unlogo.png", alt="United Nations Logo" width="20%")
     main.container.mt-5 
-      h1.text-start.mb-4 Welcome to the DataFlow.
-      p.text-start DataFlow is a website that offers a variety of data visualizations, as well as a platform for people to learn more about floods. The site is designed to be user-friendly and accessible, with a focus on providing a seamless experience for users of all skill levels.
-    section.container.mt-5
-      h2.text-left Navigation
+      h1.text-start.mb-4 Latest Version
+      p.text-start 
+        | The latest version of the system incorporates an expanded historic dataset sourced from the  
+        a(href="https://www.dws.gov.za/hydrology/") South Africa Government Website
+        |  providing functionality to more easily view and access hydrology related data and information. The currently stored historic data is non-comprehensive, but provides a prototype template in which current data could be migrated and added with the relevant functions.
+      h1.text-start.mb-4 About
+      p.text-start DataFlow is an operational system for data visualisation and information distribution. It has been developed by Synoptic Group 62 in collaboration with University of East Anglia as an end-of-year project. The system is operational but must be updated manually. The concept is to be able to have real-time or near real-time updates with access to the weather station and/or a relevant API. 
+      h1.text-start.mb-4 Database 
+      p.text-start The database is split into different schemas depending on the types of data available. Each database has a table for each specific weather station in the region, which can have data uploaded to it by a relevant admin. This data is then collated and viewable and interactable on our website, DataFlow. 
 
-    .d-md-flex.flex-md-equal.w-100.my-md-3.pt-md-5
-      .bg-dark.mr-md-3.pt-3.px-3.pt-md-5.px-md-5.text-center.text-white.overflow-hidden.w-100
-        .my-3.py-3 
-          h2.display-5 Data Visualizations 
-          p.lead For analysing, accessing, and visualizing data.
-          a.btn.btn-outline-light(href='/data-visualisation') Go
-      .bg-light.mr-md-3.pt-3.px-3.pt-md-5.px-md-5.text-center.overflow-hidden.w-100
-        .my-3.py-3 
-          h2.display-5 Information Page
-          p.lead For learning more about floods and their impact.
-          a.btn.btn-outline-dark(href='#') Go
+    
+    .container.text-center.pt-5
+      .row 
+        .col-lg-2 
+          img(src="/images/harrisonheadshot.png", width="140" height="140" alt="Harrison's Face" focusable="false" role="img")
+          h3 Harrison Mills 
+          p I worked on the ... of the project! I did ... and ... My impact was ... and I learned ... When I am not working on DataFlow, I like to ...
+        .col-lg-2 
+          img(src="/images/kshitijheadshot.png", width="140" height="140" alt="Harrison's Face" focusable="false" role="img")
+          h3 Kshitij Rai 
+          p I was responsible for the ... of the project! I did ... and ... My impact was ... and I learned ... When I am not working on DataFlow, I like to ...
+        .col-lg-2  
+          img(src="/images/leihlheadshot.png", width="140" height="140" alt="Harrison's Face" focusable="false" role="img")
+          h3 Leihl Zambrano 
+          p My role in the project was ... I worked on ... and ... My impact was ... and I learned ... When I am not working on DataFlow, I like to ...
+        .col-lg-2 
+          img(src="/images/louisheadshot.png", width="140" height="140" alt="Harrison's Face" focusable="false" role="img")
+          h3 Louis Ogden 
+          p The thing I did for the project was ... I worked on ... and ... My impact was ... and I learned ... When I am not working on DataFlow, I like to ...
+        .col-lg-2 
+          img(src="/images/markheadshot.png", width="140" height="140" alt="Harrison's Face" focusable="false" role="img")
+          h3 Mark Pinguel 
+          p I was responsible for the ... of the project! I did ... and ... My impact was ... and I learned ... When I am not working on DataFlow, I like to ...
+        .col-lg-2 
+          img(src="/images/nemsungheadshot.png", width="140" height="140" alt="Harrison's Face" focusable="false" role="img")
+          h3 Nemsung Rai 
+          p I worked on many different parts of the project. The main things were the planning and design stage, involving the LoFi models and the idea of the solution. I worked on a few of the pages, including this one, as well as some universal features such as the navbar and footer. 
+
+    
           
     include _footer.pug
     // Include the shared footer component
