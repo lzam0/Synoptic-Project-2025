@@ -2,26 +2,27 @@
 // This file contains the reusable navigation bar component.
 // It conditionally displays the 'Logout' button based on the 'user' variable.
 
-nav.navbar.navbar-expand-lg.navbar-light.bg-light.mb-4
-  .container-fluid
-    img(src='/images/dataflowlogo.png', alt='Synoptic Project Logo', class='navbar-brand-logo')
-    a.navbar-brand(href='/') DataFlow
-    button.navbar-toggler(type='button', data-bs-toggle='collapse', data-bs-target='#navbarNav')
-      span.navbar-toggler-icon
-    #navbarNav.collapse.navbar-collapse
-      ul.navbar-nav.me-auto.mb-2.mb-lg-0
-        li.nav-item
-          a.nav-link(href='/') Home
-        li.nav-item
-          a.nav-link(href='/information') Information
-        li.nav-item
-          a.nav-link(href='/admin') Admin
-        li.nav-item
-          a.nav-link(href='/data-visualisation') Data Visualizations
-        
-        // Conditionally display the logout button ONLY if 'user' object is available
-        // The 'user' object is set by your authentication middleware when a user is logged in.
-        if user
-          li.nav-item
-            form.d-flex(action="/logout", method="POST")
-              button.btn.btn-outline-danger(type="submit") Logout
+.navbar
+  .logo
+    img.navbar-brand-logo(src="/images/zoomLogo.png", alt="DataFlow Logo")
+  button#burger(type="button", aria-label="Open navigation")
+    span.burger-bar
+    span.burger-bar
+    span.burger-bar
+  .nav-links
+    a(href="/") Home
+    a(href="/data-visualisation") Data
+    a(href="/information") Information
+    a(href="/about") About Us
+    a(href="/login") Login
+  // Mobile nav (hidden by default)
+  .mobile-nav#mobileNav
+    a(href="/") Home
+    a(href="/data-visualisation") Data
+    a(href="/information") Information
+    a(href="/about") About Us
+    a(href="/login") Login 
+    if user
+      li.nav-item
+        form.d-flex(action="/logout", method="POST")
+          button.btn.btn-outline-danger(type="submit") Logout

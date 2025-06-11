@@ -10,6 +10,7 @@ const authRoutes = require('./routes/authRouter');
 const adminRoutes = require('./routes/adminRouter');
 const dataVisRoutes = require('./routes/dataVisRouter');
 const infoRoutes = require('./routes/infoRouter');
+const aboutRoutes = require('./routes/aboutRouter');
 
 // Load environment variables from the .env file
 require('dotenv').config();
@@ -41,10 +42,11 @@ app.use('/', authRoutes);
 app.use('/', adminRoutes);
 app.use('/', dataVisRoutes);
 app.use('/', infoRoutes);
+app.use('/', aboutRoutes);
 
 // Public Routes
 app.use((req, res, next) => {
-  const publicPaths = ['/login', '/register', '/', '/data-visualisation', '/information'];
+  const publicPaths = ['/login', '/register', '/', '/data-visualisation', '/information', '/about'];
   
   if (publicPaths.some(pathPrefix => req.path.startsWith(pathPrefix))) {
     return next();
