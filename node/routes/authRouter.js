@@ -10,7 +10,7 @@ router.get('/login', (req, res) => {
 // Login POST request
 router.post('/login', (req, res, next) => {
   console.log('POST /login received with body:', req.body);
-  next();  // important!
+  next();
 }, AuthController.login);
 
 // Logout POST request

@@ -25,6 +25,11 @@ html(lang="en")
     .container.mt-5.d-flex.justify-content-center
       .card.shadow-sm.border.rounded.p-4(style="max-width: 400px; width: 100%;")
         h2.card-title.text-center.mb-4 Login
+
+        //- Error message display
+        if error
+          .alert.alert-danger(role="alert") #{error}
+
         form(action="/login", method="POST")
           .mb-3
             label.form-label(for="username") Username:

@@ -65,8 +65,10 @@ if (process.env.IMPORT_CSV_ON_START === 'true') {
 }
 
 // Start the server
-const server = app.listen(port, () => {
-  console.log(`🚀 Server running at http://localhost:${port} 🚀`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`🚀 Server running at http://localhost:${port} 🚀`);
+  });
+}
 
-module.exports = server;
+module.exports = app;

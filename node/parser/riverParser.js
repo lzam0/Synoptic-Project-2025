@@ -87,7 +87,7 @@ async function parseCSVFile(filePath) {
     );
 
     if (existing.rows.length > 0) {
-      console.log(`Skipping duplicate: ${station} - ${date} ${timeStr}`);
+      //console.log(`Skipping duplicate: ${station} - ${date} ${timeStr}`);
       continue;
     }
 
