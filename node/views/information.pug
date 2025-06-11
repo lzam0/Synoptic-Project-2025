@@ -11,7 +11,17 @@ html
       .logo
         img(src="/images/logo.png", alt="Logo", style="height:48px; width:48px; border-radius:6px;")
         span(style="margin-left:0.7rem; font-weight:600; font-size:1.1rem;") DataFlow
+      button#burger(type="button", aria-label="Open navigation")
+        span.burger-bar
+        span.burger-bar
+        span.burger-bar
       .nav-links
+        a(href="/") Home
+        a(href="/login") Login
+        a(href="/data") Data
+        a(href="/information") Information
+      // Mobile nav (hidden by default)
+      .mobile-nav#mobileNav
         a(href="/") Home
         a(href="/login") Login
         a(href="/data") Data
@@ -62,3 +72,13 @@ html
                 .related-author Author
     .footer
       | © 2025 DataFlow &mdash; Louis Ogden
+    script.
+      const burger = document.getElementById('burger');
+      const mobileNav = document.getElementById('mobileNav');
+      burger.addEventListener('click', () => {
+        mobileNav.classList.toggle('open');
+      });
+      // Optional: close menu when clicking a link
+      mobileNav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => mobileNav.classList.remove('open'));
+      });
