@@ -73,6 +73,10 @@ app.use((req, res, next) => {
 app.use('/', adminRouter);
 app.use('/', dataVisRouter);
 
+if (process.env.IMPORT_CSV_ON_START === 'true') {
+  require('./parser/riverParser');
+}
+
 // Start the Express server
 const server = app.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port} 🚀`);
