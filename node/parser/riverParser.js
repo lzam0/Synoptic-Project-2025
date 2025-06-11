@@ -4,19 +4,19 @@ const { parse } = require('csv-parse');
 const { Client } = require('pg');
 
 // Import connection pool
-const pool = require('../db');
+const pool = require('../db'); // since we're inside node/parsers/
 
-// Path to data folder
+// Path to data folder (relative from node/parsers/)
 const DATA_FOLDER = path.join(__dirname, '../../data');
 
 async function parseCSVFile(filePath) {
   const client = new Client({
-  user: process.env.PGUSER,
-  host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
-  password: process.env.PGPASSWORD,
-  port: process.env.PGPORT,
-});
+    user: pool.user,
+    host: pool.host,
+    database: pool.database,
+    password: pool.password,
+    port: pool.port,
+  });
 
   await client.connect();
 
@@ -83,12 +83,12 @@ async function parseCSVFile(filePath) {
 
     // Optional: Check for existing entry
     const existing = await client.query(
-      `SELECT 1 FROM river WHERE station = $1 AND date = $2 AND time = $3`,
+      'SELECT 1 FROM river WHERE station = $1 AND date = $2 AND time = $3',
       [station, date, timeStr]
     );
 
     if (existing.rows.length > 0) {
-      // console.log(`Skipping duplicate: ${station} - ${date} ${timeStr}`);
+      console.log(`Skipping duplicate: ${station} - ${date} ${timeStr}`);
       continue;
     }
 
