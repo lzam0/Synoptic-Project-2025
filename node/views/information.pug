@@ -4,27 +4,18 @@ html
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Reports Website
-    link(rel="stylesheet", href="/css/css")
+    
+    // Link to Bootstrap CSS for styling and responsiveness
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="/css/style.css")
     link(rel="stylesheet", href="/css/info.css")
   body
-    .navbar
-      .logo
-        img(src="/images/zoomLogo.png", alt="Logo", style="height:60px; width:60px; border-radius:8px;")
-      button#burger(type="button", aria-label="Open navigation")
-        span.burger-bar
-        span.burger-bar
-        span.burger-bar
-      .nav-links
-        a(href="/") Home
-        a(href="/login") Login
-        a(href="/data") Data
-        a(href="/information") Information
-      // Mobile nav (hidden by default)
-      .mobile-nav#mobileNav
-        a(href="/") Home
-        a(href="/login") Login
-        a(href="/data") Data
-        a(href="/information") Information
+    // Google Translate dropdown
+    include _translate.pug
+
+    include _navbar.pug
+    // Include the shared navigation bar component
+
     .container
       .sidebar
         h3 Other Articles & Reports
@@ -69,7 +60,9 @@ html
                 img.related-thumb(src="/images/bluelines.png", alt="related")
                 .related-title Title
                 .related-author Author
-    .footer
+    include _footer.pug
+    // Include the shared footer component
+    //.footer
       | © 2025 DataFlow &mdash; Louis Ogden
     script.
       const burger = document.getElementById('burger');
