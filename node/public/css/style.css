@@ -1,0 +1,52 @@
+#google_translate_element {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 9999;
+      }
+      .login-container {
+        max-width: 400px;
+        margin: 60px auto; /* Increased top margin for better spacing */
+        padding: 40px; /* Increased padding */
+        border: 1px solid #dee2e6; /* Bootstrap default border color */
+        border-radius: 0.5rem; /* Rounded corners */
+        box-shadow: 0 .125rem .25rem rgba(0,0,0,.075); /* Subtle shadow */
+        background-color: #fff; /* White background for the card */
+      }
+      .login-container h2 {
+        text-align: center;
+        margin-bottom: 30px; /* Increased margin below title */
+        font-weight: bold; /* Make title bold */
+        color: #343a40; /* Darker text color */
+      }
+      .login-container label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500; /* Slightly bolder labels */
+        color: #495057; /* Slightly darker label text */
+      }
+      .login-container input[type="text"],
+      .login-container input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px; /* Increased margin below inputs */
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        box-sizing: border-box; /* Ensures padding doesn't affect total width */
+        font-size: 1rem; /* Standard font size */
+      }
+      .login-container button[type="submit"] {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff; /* Primary blue button */
+        color: white;
+        border: none;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        font-size: 1.1rem; /* Slightly larger text */
+        font-weight: bold;
+        transition: background-color 0.2s ease; /* Smooth transition on hover */
+      }
+      .login-container button[type="submit"]:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+      }
