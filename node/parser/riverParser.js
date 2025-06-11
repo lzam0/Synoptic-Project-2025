@@ -9,6 +9,15 @@ const pool = require('../db'); // since we're inside node/parsers/
 // Path to data folder (relative from node/parsers/)
 const DATA_FOLDER = path.join(__dirname, '../../data');
 
+// Safe parse function for level/flow
+function safeParseNumber(value) {
+  if (value === undefined || value === null || value === '') {
+    return null;
+  }
+  const num = parseFloat(value);
+  return isNaN(num) ? null : num;
+}
+
 async function parseCSVFile(filePath) {
   const client = new Client({
     user: pool.user,
@@ -53,7 +62,8 @@ async function parseCSVFile(filePath) {
   let dataSection = false;
 
   for await (const row of parser) {
-    if (!dataSection && row[0] && row[0].trim() === 'Year') {
+    if (!dataSection && row[0] && row[0].replace('\uFEFF','').trim() === 'Year') {
+      console.log('✅ Data section found — starting to parse rows...');
       dataSection = true;
       continue;
     }
@@ -78,8 +88,9 @@ async function parseCSVFile(filePath) {
       continue;
     }
 
-    const level = levelStr ? parseFloat(levelStr) : null;
-    const flow = flowStr ? parseFloat(flowStr) : null;
+    // Use safeParseNumber for level/flow
+    const level = safeParseNumber(levelStr);
+    const flow = safeParseNumber(flowStr);
 
     // Optional: Check for existing entry
     const existing = await client.query(
