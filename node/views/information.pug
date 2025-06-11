@@ -5,185 +5,7 @@ html
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Reports Website
     link(rel="stylesheet", href="/css/css")
-    style.
-      body {
-        background: #fff;
-        margin: 0;
-        font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
-      }
-      .navbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 1.5rem 3rem 1.5rem 2rem;
-        border-bottom: 1px solid #eee;
-        background: #fff;
-      }
-      .navbar .logo {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-      }
-      .navbar .logo-square {
-        width: 48px;
-        height: 48px;
-        background: #ddd;
-        border-radius: 6px;
-      }
-      .navbar .nav-links {
-        display: flex;
-        gap: 2.5rem;
-      }
-      .navbar .nav-links a {
-        color: #222;
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 1.1rem;
-        padding: 0.3rem 0.8rem;
-        border-radius: 6px;
-        transition: background 0.2s;
-      }
-      .navbar .nav-links a:hover {
-        background: #f5f5f5;
-      }
-      .container {
-        display: flex;
-        max-width: 1400px;
-        margin: 2rem auto;
-        gap: 2.5rem;
-        padding: 0 2rem;
-      }
-      .sidebar {
-        width: 270px;
-        flex-shrink: 0;
-      }
-      .sidebar h3 {
-        margin-top: 0;
-        font-size: 1.2rem;
-        margin-bottom: 1.2rem;
-      }
-      .sidebar-list {
-        display: flex;
-        flex-direction: column;
-        gap: 1.2rem;
-      }
-      .sidebar-item {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        background: #f7f7f7;
-        border-radius: 8px;
-        padding: 0.7rem 0.7rem 0.7rem 0.7rem;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-      .sidebar-item:hover {
-        background: #eaeaea;
-      }
-      .sidebar-thumb {
-        width: 56px;
-        height: 56px;
-        object-fit: cover;
-        border-radius: 6px;
-        background: #ddd;
-      }
-      .sidebar-info {
-        display: flex;
-        flex-direction: column;
-      }
-      .sidebar-title {
-        font-weight: 600;
-        font-size: 1rem;
-        margin-bottom: 0.2rem;
-      }
-      .sidebar-author {
-        font-size: 0.92rem;
-        color: #888;
-      }
-      .main-content {
-        flex: 1;
-        max-width: 900px;
-      }
-      .main-content h1 {
-        font-size: 2.4rem;
-        font-weight: 700;
-        margin-bottom: 0.7rem;
-      }
-      .main-content h2 {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-      }
-      .main-content .subheading {
-        color: #666;
-        margin-bottom: 2rem;
-        font-size: 1.1rem;
-      }
-      .main-content .main-img {
-        width: 100%;
-        max-width: 700px;
-        border-radius: 12px;
-        margin-bottom: 2rem;
-        object-fit: cover;
-        background: #eee;
-        height: 320px;
-        display: block;
-      }
-      .main-content p {
-        margin-bottom: 1.3rem;
-        color: #222;
-        font-size: 1.05rem;
-        line-height: 1.7;
-      }
-      .main-content .inline-img {
-        width: 340px;
-        border-radius: 10px;
-        margin: 2rem 0;
-        object-fit: cover;
-        background: #eee;
-        height: 180px;
-        display: block;
-      }
-      .related-section {
-        margin-top: 3.5rem;
-      }
-      .related-section h2 {
-        font-size: 1.3rem;
-        margin-bottom: 1.2rem;
-      }
-      .related-list {
-        display: flex;
-        gap: 2.5rem;
-      }
-      .related-item {
-        width: 220px;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-      .related-thumb {
-        width: 100%;
-        height: 120px;
-        border-radius: 8px;
-        object-fit: cover;
-        background: #ddd;
-      }
-      .related-title {
-        font-weight: 600;
-        font-size: 1rem;
-      }
-      .related-author {
-        font-size: 0.93rem;
-        color: #888;
-      }
-      .footer {
-        margin-top: 4rem;
-        padding: 2.5rem 0 1.5rem 0;
-        border-top: 1px solid #eee;
-        text-align: center;
-        color: #888;
-        font-size: 1rem;
-      }
+    link(rel="stylesheet", href="/css/info.css")
   body
     .navbar
       .logo
@@ -200,7 +22,7 @@ html
         .sidebar-list
           each val, i in [1,2,3,4]
             .sidebar-item
-              img.sidebar-thumb(src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80", alt="thumb")
+              img.sidebar-thumb(src="/images/bluelines.png", alt="thumb")
               .sidebar-info
                 .sidebar-title Article #{i}
                 .sidebar-author Author Name
@@ -208,13 +30,13 @@ html
         h1 Information Page
         h2 Wastage and Flooding
         .subheading How Everyday Waste Contributes to Flood Risks and What You Can Do
-        img.main-img(src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=800&q=80", alt="main")
+        img.main-img(src="/images/floodbrev.png", alt="main")
         p Improper waste disposal poses a significant threat to urban environments, contributing to increased flood risks. In many urban areas, including places like Makers Valley in Johannesburg, limited landfill space is a pressing issue, with existing landfills rapidly reaching capacity. This challenge is compounded by persistent problems such as illegal waste dumping, even in areas that receive waste management services.
         p When waste is not properly disposed of, it can obstruct drainage systems, exacerbating flooding during heavy rains. The presence of bagged rubbish left on streets, which can be torn open and scattered, further contributes to this problem. Waste management services, such as Pikitup in Johannesburg, collect thousands of tonnes of waste daily, yet the sheer volume and improper disposal methods remain a challenge. The issue is also linked to aging infrastructure and a growing population, which strain existing waste and water systems.
 
         p To combat these issues, initiatives like "Separation at Source" are crucial. This scheme encourages residents to separate their waste for recycling, aiming to reduce landfill waste by at least 33%. Proper waste separation not only extends the life of landfills but also reduces the hazardous conditions faced by informal recyclers who sift through waste for valuable materials like plastic, paper, cans, and glass.
 
-        img.inline-img(src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80", alt="inline")
+        img.inline-img(src="/images/wasteFlood.png", alt="inline")
         p By understanding the impact of our waste habits and actively participating in proper disposal and recycling efforts, we can contribute to more resilient communities and mitigate the devastating effects of flooding.
         p To prevent wastage from contributing to flooding in your community:
         ul
@@ -235,7 +57,7 @@ html
           .related-list
             each val, i in [1,2,3]
               .related-item
-                img.related-thumb(src="https://images.unsplash.com/photo-1465101178521-c1a9136a3b43?auto=format&fit=crop&w=400&q=80", alt="related")
+                img.related-thumb(src="/images/bluelines.png", alt="related")
                 .related-title Title
                 .related-author Author
     .footer
