@@ -61,16 +61,3 @@ html
                 .related-title Title
                 .related-author Author
     include _footer.pug
-    // Include the shared footer component
-    //.footer
-      | © 2025 DataFlow &mdash; Louis Ogden
-    script.
-      const burger = document.getElementById('burger');
-      const mobileNav = document.getElementById('mobileNav');
-      burger.addEventListener('click', () => {
-        mobileNav.classList.toggle('open');
-      });
-      // Optional: close menu when clicking a link
-      mobileNav.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => mobileNav.classList.remove('open'));
-      });
