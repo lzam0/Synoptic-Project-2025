@@ -6,79 +6,51 @@ const session = require('express-session');
 const app = express();
 
 // Import the database connection pool (db.js is in the SAME directory as server.js within 'node/')
-const pool = require('./db'); // Corrected: Use './db' for sibling file
+const pool = require('./db');
 
 // Import authentication middleware (middleware/ is inside the 'node/' folder)
-const authenticateToken = require('./middleware/authMiddleware'); // Corrected: Use './middleware/' for sibling folder
+const authenticateToken = require('./middleware/authMiddleware');
 // Import existing authentication and admin routes (routes/ is inside the 'node/' folder)
-const authRoutes = require('./routes/authRouter'); // Corrected: Use './routes/' for sibling folder
-const adminRouter = require('./routes/adminRouter'); // Corrected: Use './routes/' for sibling folder
+const authRoutes = require('./routes/authRouter');
+const adminRouter = require('./routes/adminRouter');
 
 
 // Load environment variables from the .env file (assuming .env is in project root, one level up from node/)
-require('dotenv').config(); // Assuming .env is at Synoptic-Project-2025/.env
+require('dotenv').config();
 
 // Get the port from environment variables, or default to 3000
 const port = process.env.PORT || 3000;
 
 // Set views directory. CORRECTED: views/ is directly inside node/
-app.set("views", path.join(__dirname, 'views')); // CORRECTED: path.join(__dirname, 'views')
+app.set("views", path.join(__dirname, 'views'));
 app.set("view engine", "pug");
 
 // Serve static files from the 'public' directory.
 // CORRECTED: 'public/' is directly inside 'node/' as per screenshot.
-app.use(express.static(path.join(__dirname, 'public'))); // Corrected: path.join(__dirname, 'public')
+app.use(express.static(path.join(__dirname, 'public')));
 // Serve uploaded files.
 // ASSUMPTION: 'uploads/' is in the project root, one level up from 'node/'.
-app.use(express.static(path.join(__dirname, '../uploads'))); // Assuming uploads is at Synoptic-Project-2025/uploads/
+app.use(express.static(path.join(__dirname, '../uploads')));
 
 // Middleware to parse URL-encoded form data (e.g., from HTML forms)
 app.use(bodyParser.urlencoded({ extended: true }));
 // Middleware to parse JSON request bodies
 app.use(express.json());
 
-// Middleware to parse cookies
+// Middleware to parse cookies (MUST come before authentication if it uses cookies)
 app.use(cookieParser());
 
-// --- Global Middleware: Authenticate User and make req.user available to templates ---
-// Apply authenticateToken globally to make user data available across all routes that render the navbar.
-// This needs to be placed AFTER `cookieParser()` if your `authenticateToken` relies on cookies.
-app.use(authenticateToken);
-
-// Middleware to expose req.user to res.locals for Pug templates.
-app.use((req, res, next) => {
-  res.locals.user = req.user;
-  next();
-});
-
-// --- Database Data Mapping for Visualizations ---
-const stationMapping = {
-  'A5H006YRPK': 'A5H006', // Limpopo River Station
-  'D1H003YRPK': 'D1H003', // Orange River Station
-  // Add more mappings here if you have more data visualization links
-};
-
-// --- Human-readable River Names for Display ---
-const displayRiverNames = {
-  'A5H006': 'Limpopo River',
-  'D1H003': 'Orange River',
-  // Add more station to river name mappings for display purposes
-};
-
-// --- Application Routes ---
-
-// Use authentication and admin routes
-app.use('/', authRoutes);
-app.use('/', adminRouter);
-
-// Home route: Renders the default index page.
+// --- PUBLIC ROUTES (NO AUTHENTICATION REQUIRED) ---
+// These routes must come BEFORE the global authentication middleware.
 app.get('/', (req, res) => {
   res.render('index');
 });
+app.use('/', authRoutes); // This typically includes /login, /register, POST /login, POST /register
 
 /**
  * Route for the initial Data Visualisation page load (no specific river selected).
  * This will display empty graphs and options to choose a river.
+ * MOVED HERE TO BE PUBLICLY ACCESSIBLE.
  */
 app.get('/data-visualisation', (req, res) => {
   console.log('Server: Rendering initial data-visualisation page (no river selected).');
@@ -93,7 +65,18 @@ app.get('/data-visualisation', (req, res) => {
  * Route for displaying data visualizations for a specific river.
  * Fetches data from the PostgreSQL database based on the file code.
  * The ':fileCode' URL parameter (e.g., 'A5H006YRPK') is mapped to a station name.
+ * MOVED HERE TO BE PUBLICLY ACCESSIBLE.
  */
+const stationMapping = {
+  'A5H006YRPK': 'A5H006', // Limpopo River Station
+  'D1H003YRPK': 'D1H003', // Orange River Station
+};
+
+const displayRiverNames = {
+  'A5H006': 'Limpopo River',
+  'D1H003': 'Orange River',
+};
+
 app.get('/data-visualisation/:fileCode', async (req, res) => {
   const requestedFileCode = req.params.fileCode.toUpperCase();
   const stationName = stationMapping[requestedFileCode];
@@ -103,6 +86,7 @@ app.get('/data-visualisation/:fileCode', async (req, res) => {
   // Check if a valid station mapping exists
   if (!stationName) {
     console.warn(`Server: No station mapping found for file code: ${requestedFileCode}`);
+    // IMPORTANT: Render an error, do NOT redirect to avoid loops.
     return res.status(404).render('error', { message: 'Data visualization not found for this river code.' });
   }
 
@@ -130,10 +114,16 @@ app.get('/data-visualisation/:fileCode', async (req, res) => {
     const dataForRiver = result.rows;
     console.log(`Server: Fetched ${dataForRiver.length} rows for station: ${stationName}`);
 
-    // If no data is found for the station, render an error or a message
+    // If no data is found for the station, render a message, do NOT redirect.
     if (dataForRiver.length === 0) {
       console.warn(`Server: No data found in the database for station: ${stationName}`);
-      return res.status(404).render('error', { message: `No data found for ${displayRiverNames[stationName] || stationName}. Please ensure data is uploaded.` });
+      return res.render('data-visualisation', {
+        title: `Data Visualization for ${displayRiverNames[stationName] || stationName}`,
+        riverName: displayRiverNames[stationName] || stationName,
+        stationName: stationName,
+        data: [], // Pass an empty array to show "No Data Found" message in Pug
+        selectedRiverCode: requestedFileCode
+      });
     }
 
     // Determine the human-readable river name for the page title and chart titles
@@ -158,6 +148,38 @@ app.get('/data-visualisation/:fileCode', async (req, res) => {
     }
   }
 });
+
+
+// --- GLOBAL AUTHENTICATION MIDDLEWARE ---
+// This middleware will run for ALL routes defined AFTER it,
+// unless explicitly excluded or handled within the middleware itself.
+// To prevent redirect loops, we'll implement a check to skip it for public paths.
+app.use((req, res, next) => {
+  // Define paths that should NOT trigger authentication redirects
+  // Added data-visualisation paths here
+  const publicPaths = ['/login', '/register', '/', '/data-visualisation'];
+
+  // If the requested path starts with one of the public paths, skip authentication.
+  // This handles both /data-visualisation and /data-visualisation/A5H006YRPK
+  if (publicPaths.some(pathPrefix => req.path.startsWith(pathPrefix))) {
+    return next();
+  }
+  // Otherwise, proceed with the authentication token check
+  authenticateToken(req, res, next);
+});
+
+
+// Middleware to expose req.user to res.locals (available to all Pug templates after successful authentication)
+// This will only run IF authentication has succeeded, or if the path was public and skipped auth.
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
+
+// --- PROTECTED ROUTES (THESE WILL NOW REQUIRE AUTHENTICATION) ---
+// These routes will only be accessible if authentication passes.
+app.use('/', adminRouter); // Admin routes are protected
+
 
 // Start the Express server
 const server = app.listen(port, () => {
