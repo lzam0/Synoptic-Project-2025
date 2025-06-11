@@ -8,3 +8,11 @@ div#google_translate_element
           layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
         }, 'google_translate_element');
       }
+
+// retrigger the Google Translate after the page loads
+script.
+  window.addEventListener('load', function() {
+    if (typeof googleTranslateElementInit === 'function') {
+      googleTranslateElementInit();
+    }
+  });
