@@ -27,15 +27,16 @@ html(lang="en")
     include _navbar.pug
 
     .container.mt-5
-      h1.text-center.mb-4 Data Visualization
+      h1.text-center.mb-4 Data Visualisation
 
       // Conditional content based on whether a river has been selected AND data is available
       if data && data.length > 0
         // Display river-specific title if data is present
         h2.text-center.mb-4 #{riverName} Data Overview
 
-        // Row for the charts, optimized for responsiveness
+        // Row for the charts, optimised for responsiveness
         .row.justify-content-center
+          a.btn.btn-outline-secondary.btn-lg.mb-3.w-25(href="#") Simulate
           .col-lg-10.col-md-12.mb-4
             .card.shadow-sm.border-primary
               .card-header.bg-primary.text-white.py-3
