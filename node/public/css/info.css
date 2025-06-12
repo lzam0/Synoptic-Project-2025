@@ -237,7 +237,14 @@ body {
   background: #f5f5f5;
 }
 
-/* Responsive styles */
+/* Hide flood aftermath image on mobile */
+@media (max-width: 600px) {
+  .aftermath-img {
+    display: none !important;
+  }
+}
+
+/* mobile responsive styles */
 @media (max-width: 900px) {
   .container {
     flex-direction: column;

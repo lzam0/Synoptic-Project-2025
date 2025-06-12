@@ -3,16 +3,83 @@ html
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title Article Details
+    title How to Act During Floods
     link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
     link(rel="stylesheet", href="/css/style.css")
     link(rel="stylesheet", href="/css/info.css")
   body
+    include _translate.pug
     include _navbar.pug
+
     .container
       .main-content
-        h1 How to act during Floods
-        p yada yada yada
-        a(href="/information") &larr; Back to Information Page
+        h1 How to Act During Floods
+        .subheading Practical Flood Safety Guidelines for Residents in High-Risk Areas
+        img.main-img(src="/images/floods1.jpg", alt="Residents moving to safety during flood")
+
+        p Floods can occur suddenly and cause major disruption, especially in lower-lying areas like Makers Valley. With heavy summer rains and inadequate drainage often worsening the situation, it is vital to understand how to act quickly and effectively before, during, and after a flood.
+
+        h2 Before a Flood
+        p Preparation is key to reducing risk and damage. Stay aware of weather forecasts and:
+        ul
+          li
+            strong Know your risk:&nbsp;
+            | Identify whether your home or workplace is in a flood-prone area.
+          li
+            strong Plan evacuation routes:&nbsp;
+            | Know the safest and quickest routes to higher ground.
+          li
+            strong Store valuables safely:&nbsp;
+            | Keep important documents and valuables in waterproof containers or on higher shelves.
+          li
+            strong Prepare an emergency kit:&nbsp;
+            | Include bottled water, non-perishable food, torch, radio, batteries, first aid supplies, and medications.
+        img.inline-img(src="/images/floodEmergency.png", alt="Flood emergency kit illustration")
+
+        h2 During a Flood
+        p Stay calm and act fast. If evacuation is advised:
+        ul
+          li
+            strong Do not walk or drive through floodwaters:&nbsp;
+            | Water depth and current are often misleading and dangerous.
+          li
+            strong Turn off electricity:&nbsp;
+            | Especially if water starts entering your home.
+          li
+            strong Move to higher ground:&nbsp;
+            | Prioritise safety over possessions.
+          li
+            strong Help neighbours if safe to do so:&nbsp;
+            | Especially elderly or disabled individuals.
+        img.inline-img(src="/images/floodWarning.jpg", alt="warning of flood danger")
+
+        h2 After a Flood
+        p Returning to your home after a flood carries risks. Remember to:
+        ul
+          li
+            strong Avoid contact with flood water:&nbsp;
+            | It may be contaminated with sewage, oil or chemicals.
+          li
+            strong Check structural damage:&nbsp;
+            | Only re-enter buildings once declared safe by authorities.
+          li
+            strong Disinfect everything:&nbsp;
+            | Clean all surfaces and food utensils.
+          li
+            strong Contact local services:&nbsp;
+            | Report damage and seek support if needed.
+        img.inline-img.aftermath-img(src="/images/floodAftermath.jpg", alt="After a flood")
+
+        p Floods are unpredictable, but preparedness and knowledge can save lives. For residents in Makers Valley, where infrastructure is often strained, community awareness and mutual support are vital.
+
+        .related-section
+          h2 Related Articles
+          .related-list
+            .related-item
+              a(href="/information/article/0")
+                img.related-thumb(src="/images/bluelines.png", alt="How to Act During Floods")
+              .related-title How to Act During Floods
+              .related-author Louis Ogden
+
     include _footer.pug
     include _bootstrap.pug
