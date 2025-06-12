@@ -3,7 +3,7 @@ const router = express.Router();
 const authenticateToken = require('../middleware/authMiddleware');
 const multer = require('multer');
 const path = require('path');
-const parseCSVFile = require('../parser/riverParser.js');
+const { parseCSVFile } = require('../parser/riverParser.js');
 const fs = require('fs');
 const pool = require('../db');
 const { Parser } = require('json2csv');
@@ -28,6 +28,7 @@ router.get('/admin', authenticateToken, async (req, res) => {
         flow
       FROM river
       ORDER BY date DESC
+      LIMIT 100
     `);
 
     res.render('admin', { user: req.user, riverData: result.rows });
