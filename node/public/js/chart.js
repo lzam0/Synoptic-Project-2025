@@ -1,26 +1,14 @@
-// public/js/charts.js
-// This script assumes that 'rawData' is a global variable
-// set by the Pug template (e.g., window.rawData),
-// and window.stationName and window.riverName are also available.
-
 (function () {
-  // Defensive check: If rawData is not defined, not an array, or empty,
-  // it means no data was passed from the server for this view.
-  // In this scenario, the Pug template will render selection options instead of canvases,
-  // so this script should gracefully exit without errors.
+  //Check if rawData is not defined, not an array, or empty,
   if (typeof window.rawData === 'undefined' || !Array.isArray(window.rawData) || window.rawData.length === 0) {
     console.info("charts.js: No rawData available or data array is empty. Skipping chart rendering.");
-    return; // Exit the IIFE if no data is present.
+    return; 
   }
 
-  // --- Data Aggregation for Yearly Averages ---
-  // Object to store aggregated data, grouped by year.
-  // Each year will store sum of 'level', sum of 'flow', and a 'count' of entries for that year.
   const yearlyData = {};
 
   // Iterate over each data point in rawData
   window.rawData.forEach(d => {
-    // Ensure 'year' is a valid number
     const year = parseInt(d.year, 10);
     if (isNaN(year)) {
       console.warn(`charts.js: Skipping data point due to invalid year: ${d.year}`);
@@ -36,14 +24,12 @@
     if (d.level !== null && !isNaN(d.level)) {
       yearlyData[year].levelSum += parseFloat(d.level);
     } else {
-      // console.warn(`charts.js: Invalid 'level' value for year ${year}: ${d.level}. Skipping for average calculation.`);
     }
 
     // Add 'flow' to sum if it's a valid number. Use 0 if invalid to not break sum.
     if (d.flow !== null && !isNaN(d.flow)) {
       yearlyData[year].flowSum += parseFloat(d.flow);
     } else {
-      // console.warn(`charts.js: Invalid 'flow' value for year ${year}: ${d.flow}. Skipping for average calculation.`);
     }
 
     // Increment count for the current year if at least one valid number (level or flow) was found
@@ -52,29 +38,26 @@
     }
   });
 
-  // Prepare labels (years) and calculated average values for charting
-  // Sort years to ensure chronological order on the charts
   const labels = Object.keys(yearlyData).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
 
   // Calculate average levels and flows for each year
   const avgLevels = labels.map(year => {
-    // Calculate average, handle division by zero or invalid sums. Format to two decimal places.
     const avg = yearlyData[year].count > 0 ? (yearlyData[year].levelSum / yearlyData[year].count) : NaN;
-    return avg; // Let Chart.js handle formatting or keep as float for precision
+    return avg; 
   });
 
   const avgFlows = labels.map(year => {
     const avg = yearlyData[year].count > 0 ? (yearlyData[year].flowSum / yearlyData[year].count) : NaN;
-    return avg; // Let Chart.js handle formatting or keep as float for precision
+    return avg; 
   });
 
   // Get station and river name from window variables (set by Pug)
   const stationName = window.stationName || 'Unknown Station';
   const riverDisplayName = window.riverName || 'Unknown River';
 
-  // --- Chart.js Global Configuration (Optional but good practice) ---
-  Chart.defaults.font.family = 'Inter, sans-serif'; // Assuming Inter font or similar readable font
-  Chart.defaults.color = '#333'; // Default text color
+  //  sets global defaults
+  Chart.defaults.font.family = 'Inter, sans-serif'; 
+  Chart.defaults.color = '#333'; 
 
 
   // --- Line Chart: Average Water Level and Flow per Year ---
@@ -84,26 +67,26 @@
     new Chart(ctx, {
       type: 'line',
       data: {
-        labels: labels, // Years on the X-axis
+        labels: labels, 
         datasets: [
           {
-            label: 'Avg Level (m)', // Label for the first line dataset
-            data: avgLevels, // Data points for average level
-            borderColor: 'rgb(54, 162, 235)', // Blue color for the line
-            backgroundColor: 'rgba(54, 162, 235, 0.2)', // Light blue fill under the line
-            fill: false, // Do not fill the area under the line
-            yAxisID: 'y-level', // Associate with the 'y-level' axis
-            tension: 0.1, // Smooth the line
-            pointRadius: 3, // Size of data points
+            label: 'Avg Level (m)', 
+            data: avgLevels, 
+            borderColor: 'rgb(54, 162, 235)', 
+            backgroundColor: 'rgba(54, 162, 235, 0.2)', 
+            fill: false, 
+            yAxisID: 'y-level', 
+            tension: 0.1, 
+            pointRadius: 3, 
             pointHoverRadius: 7
           },
           {
-            label: 'Avg Flow (cumec)', // Label for the second line dataset
-            data: avgFlows, // Data points for average flow
-            borderColor: 'rgb(75, 192, 192)', // Greenish-blue color for the line
-            backgroundColor: 'rgba(75, 192, 192, 0.2)', // Light greenish-blue fill
+            label: 'Avg Flow (cumec)',
+            data: avgFlows,
+            borderColor: 'rgb(75, 192, 192)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
             fill: false,
-            yAxisID: 'y-flow', // Associate with the 'y-flow' axis
+            yAxisID: 'y-flow',
             tension: 0.1,
             pointRadius: 3,
             pointHoverRadius: 7
@@ -111,17 +94,17 @@
         ]
       },
       options: {
-        responsive: true, // Make the chart responsive to container size
-        maintainAspectRatio: false, // Allow canvas to resize freely
+        responsive: true, 
+        maintainAspectRatio: false, 
         interaction: {
-          mode: 'index', // Show tooltips for all datasets at a given index
-          intersect: false // Tooltips appear even if not directly over a point
+          mode: 'index',
+          intersect: false 
         },
-        stacked: false, // Datasets are not stacked
+        stacked: false, 
         plugins: {
           title: {
             display: true,
-            text: `${riverDisplayName} (${stationName}) - Average Water Level and Flow per Year`, // Dynamic title
+            text: `${riverDisplayName} (${stationName}) - Average Water Level and Flow per Year`, 
             font: { size: 18, weight: 'bold' },
             padding: { top: 10, bottom: 20 }
           },
@@ -133,7 +116,7 @@
                   label += ': ';
                 }
                 if (context.parsed.y !== null) {
-                  label += context.parsed.y.toFixed(2); // Format tooltip value to 2 decimal places
+                  label += context.parsed.y.toFixed(2);
                 }
                 return label;
               }
@@ -144,40 +127,40 @@
           x: {
             title: {
               display: true,
-              text: 'Year', // X-axis title
+              text: 'Year',
               font: { size: 14, weight: 'bold' }
             },
-            type: 'category', // Use 'category' type for discrete years
+            type: 'category',
             ticks: {
                 autoSkip: true,
                 maxRotation: 45,
                 minRotation: 0
             }
           },
-          'y-level': { // Configuration for the left Y-axis (Level)
+          'y-level': {
             type: 'linear',
             display: true,
             position: 'left',
             title: {
               display: true,
-              text: 'Average Level (m)', // Y-axis title
+              text: 'Average Level (m)',
               font: { size: 14, weight: 'bold' }
             },
             grid: {
-              drawOnChartArea: true // Draw grid lines for this axis
+              drawOnChartArea: true
             }
           },
-          'y-flow': { // Configuration for the right Y-axis (Flow)
+          'y-flow': {
             type: 'linear',
             display: true,
             position: 'right',
             title: {
               display: true,
-              text: 'Average Flow (cumec)', // Y-axis title
+              text: 'Average Flow (cumec)',
               font: { size: 14, weight: 'bold' }
             },
             grid: {
-              drawOnChartArea: false // Do not draw grid lines for this axis (to avoid clutter)
+              drawOnChartArea: false 
             }
           }
         }
@@ -193,17 +176,17 @@
   if (barChartCanvas) {
     const barCtx = barChartCanvas.getContext('2d');
     new Chart(barCtx, {
-      type: 'bar', // Type of chart: bar
+      type: 'bar',
       data: {
-        labels: labels, // Years on the X-axis
+        labels: labels, 
         datasets: [
           {
-            label: 'Avg Flow (cumec)', // Label for the bar dataset
-            data: avgFlows, // Data points for average flow
-            backgroundColor: 'rgba(75, 192, 192, 0.8)', // Bar color
-            borderColor: 'rgba(75, 192, 192, 1)', // Border color of bars
-            borderWidth: 1, // Border width
-            borderRadius: 5 // Rounded corners for bars
+            label: 'Avg Flow (cumec)',
+            data: avgFlows,
+            backgroundColor: 'rgba(75, 192, 192, 0.8)',
+            borderColor: 'rgba(75, 192, 192, 1)', 
+            borderWidth: 1,
+            borderRadius: 5 
           }
         ]
       },
@@ -213,7 +196,7 @@
         plugins: {
           title: {
             display: true,
-            text: `${riverDisplayName} (${stationName}) - Average Water Flow per Year (Bar Chart)`, // Dynamic title
+            text: `${riverDisplayName} (${stationName}) - Average Water Flow per Year (Bar Chart)`, 
             font: { size: 18, weight: 'bold' },
             padding: { top: 10, bottom: 20 }
           },
@@ -225,7 +208,7 @@
                   label += ': ';
                 }
                 if (context.parsed.y !== null) {
-                  label += context.parsed.y.toFixed(2); // Format tooltip value to 2 decimal places
+                  label += context.parsed.y.toFixed(2);
                 }
                 return label;
               }
@@ -236,10 +219,10 @@
           x: {
             title: {
               display: true,
-              text: 'Year', // X-axis title
+              text: 'Year', 
               font: { size: 14, weight: 'bold' }
             },
-            type: 'category', // Use 'category' type for discrete years
+            type: 'category', 
             ticks: {
                 autoSkip: true,
                 maxRotation: 45,
@@ -247,10 +230,10 @@
             }
           },
           y: {
-            beginAtZero: true, // Start Y-axis from zero
+            beginAtZero: true, 
             title: {
               display: true,
-              text: 'Average Flow (cumec)', // Y-axis title
+              text: 'Average Flow (cumec)', 
               font: { size: 14, weight: 'bold' }
             },
             grid: {
@@ -273,10 +256,10 @@
       return;
     }
 
-    let tableHTML = `<h2 class="mt-5 text-center">Average Data Table for ${riverDisplayName} (${stationName})</h2>`; // Dynamic table title
+    let tableHTML = `<h2 class="mt-5 text-center">Average Data Table for ${riverDisplayName} (${stationName})</h2>`; 
     // Bootstrap classes for responsive and styled table
     tableHTML += '<div class="table-responsive"><table class="table table-striped table-hover table-bordered shadow-sm">';
-    tableHTML += '<thead class="table-dark"><tr><th>Year</th><th>Average Level (m)</th><th>Average Flow (cumec)</th><th>Count</th></tr></thead>'; // Table headers
+    tableHTML += '<thead class="table-dark"><tr><th>Year</th><th>Average Level (m)</th><th>Average Flow (cumec)</th><th>Count</th></tr></thead>'; 
     tableHTML += '<tbody>';
 
     // Iterate through the aggregated yearlyData to populate the table
@@ -294,7 +277,7 @@
     });
 
     tableHTML += '</tbody></table></div>';
-    tableContainer.innerHTML = tableHTML; // Inject the generated table HTML into the container
+    tableContainer.innerHTML = tableHTML; 
   }
 
   // Call the function to render the data table when the script runs
