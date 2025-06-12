@@ -63,11 +63,16 @@ async function parseCSVFile(filePath) {
 
   for await (const row of parser) {
     rowCount++;
+
+    // Check for "Year" header — required to begin parsing
     if (!dataSection && row[0]?.replace('\uFEFF', '').trim() === 'Year') {
       console.log('✅ Data section found — starting to parse rows...');
       dataSection = true;
       continue;
     }
+
+    // Fail if we've read through 20+ rows with no "Year" header
+    if (!dataSection && rowCount > 20) {
       throw new Error('Invalid CSV: Missing "Year" header — not in expected format.');
     }
 
