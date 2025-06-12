@@ -3,9 +3,7 @@ const router = express.Router();
 
 const articles = [
   { id: 0, title: "How to Act During Floods", author: "Makers Valley Flood Saftey" },
-  { id: 1, title: "Recycling in Johannesburg", author: "John Smith" },
-  { id: 2, title: "Understanding Waste Management", author: "Alex Lee" },
-  { id: 3, title: "Preventing Urban Flooding", author: "Sam Patel" }
+  { id: 1, title: "Article", author: "Not made yet" }
 ];
 
 router.get('/information', (req, res) => {
@@ -17,8 +15,17 @@ router.get('/information/article/0', (req, res) => {
 });
 
 router.get('/information/article/:id', (req, res) => {
-  if (req.params.id === '0') return res.render('info0', { user: req.user });
-  res.render('information', { user: req.user, articleId: req.params.id });
+  const articleId = parseInt(req.params.id, 10);
+  // Check if exists
+  const article = articles.find(a => a.id === articleId);
+  if (!article || articleId === 0) {
+    return res.send(`
+      <script>
+        alert('Error, page not found!');
+        window.location.href = '/information';
+      </script>
+    `);
+  }
 });
 
 module.exports = router;
