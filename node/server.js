@@ -3,7 +3,6 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const app = express();
 
 // Load environment variables
 require('dotenv').config();
@@ -16,8 +15,8 @@ const dataVisRoutes = require('./routes/dataVisRouter');
 const infoRoutes = require('./routes/infoRouter');
 const aboutRoutes = require('./routes/aboutRouter');
 
-// Use .env port
-const port = process.env.PORT;
+const app = express();
+const port = process.env.PORT || 3000;
 
 // Set up views
 app.set("views", path.join(__dirname, "views"));
@@ -61,7 +60,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Run river parser at startup if enabled in .env
+// Run river parser at startup if enabled
 if (process.env.IMPORT_CSV_ON_START === 'true') {
   const { main } = require('./parser/riverParser');
   main().catch(err => {
@@ -69,20 +68,16 @@ if (process.env.IMPORT_CSV_ON_START === 'true') {
   });
 }
 
-// Start server
-let server;
+// Only start server if NOT in test mode
 if (process.env.NODE_ENV !== 'test') {
-  server = app.listen(port, () => {
-    console.log(`🏐🏐🏐🏐🏐 LEIHL ZAMBRANO TEST BRANCH 1.0`);
+  app.listen(port, () => {
+    console.log(`🏐🏐🏐🏐🏐 LEIHL ZAMBRANO TEST BRANCH 1.0 listening on port ${port}`);
   });
 
   process.on('SIGINT', () => {
     console.log('SIGINT received: closing server');
-    server.close(() => {
-      console.log('Server closed');
-      process.exit(0);
-    });
+    process.exit(0);
   });
 }
 
-module.exports = { app, server };
+module.exports = app;
