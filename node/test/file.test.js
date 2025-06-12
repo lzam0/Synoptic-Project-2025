@@ -29,7 +29,8 @@ describe('Admin Add Data Upload (Invalid File)', () => {
       .attach('csvFile', fs.readFileSync(testFilePath), 'test.txt')
       .end((err, res) => {
         expect(res).to.have.status(400);
-        expect(res.text).to.include('Error adding data');
+        // Match the router's error message for invalid file type
+        expect(res.text).to.include('Invalid file type. Please upload a CSV file.');
         done();
       });
   });
@@ -41,7 +42,8 @@ describe('Admin Add Data Upload (Invalid File)', () => {
       .attach('csvFile', fs.readFileSync(testFilePath2), 'bad-data.csv')
       .end((err, res) => {
         expect([400, 500]).to.include(res.status); // Accept either depending on your handler
-        expect(res.text).to.include('Error adding data');
+        // Match the router's error message for CSV parsing errors
+        expect(res.text).to.include('Error adding data. Please check your CSV file and try again.');
         done();
       });
   });
