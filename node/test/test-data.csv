@@ -1,0 +1,21 @@
+THM123  River Thames,,,,
+Hydro ,,,,
+Year, Date, Time, Level, Flow
+Year,Date,Time,Level (m),Flow (cumec)
+2019,20190310, 08:00,  0.850,  120.456,
+2019,20190311, 09:30,  0.875,  130.789,
+2020,20200415, 14:45,  0.900,  140.234,
+2021,20210722, 16:00,  1.050,  180.120,
+2022,20220530, 07:15,  1.100,  190.567,
+2023,20230912, 18:30,  1.200,  220.334,
+2024,20240305, 12:00,  1.150,  210.123,
+
+
+
+Explanation of codes:
+
+A ...  Above Rating
+E ...  Estimated Data
+M ...  Missing Data
+Q ...  Data Not Audited
+Z ...  No info for stage/disch determination
