@@ -17,12 +17,19 @@ html(lang="en")
     // Chart.js Adapter for Moment.js (Crucial for displaying time on X-axis, depends on Moment.js)
     script(src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0/dist/chartjs-adapter-moment.min.js")
 
-    // Inline style for Google Translate dropdown positioning
+    // Inline style for Google Translate dropdown positioning (Moved to head for better practice)
+    style.
+      #google_translate_element {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 9999;
+      }
+
   body
-    // Google Translate dropdown div
+    // Google Translate dropdown div and scripts (assuming _translate.pug contains div, script, and style logic)
     include _translate.pug
       
-
     // Include the shared navigation bar component
     include _navbar.pug
 
@@ -57,13 +64,10 @@ html(lang="en")
             div#dataTableContainer
 
         // Pass the raw data from the server (fetched from DB) and other info to the client-side JavaScript.
-        // This script block is only rendered if 'data' is available, preventing errors on initial load.
         script.
           window.rawData = !{JSON.stringify(data)};
-          window.stationName = "#{stationName}"; // Pass station name for chart titles
-          window.riverName = "#{riverName}";     // Pass river display name for chart titles
-        // Link to your custom JavaScript file containing Chart.js logic.
-        // This must be placed AFTER the Chart.js core and adapter libraries, and after window.rawData assignment.
+          window.stationName = "#{stationName}"; 
+          window.riverName = "#{riverName}";     
         script(src='/js/chart.js')
 
       else if selectedRiverCode
@@ -83,11 +87,17 @@ html(lang="en")
           h2 Please select a river to view its data visualizations.
           p Choose from the options below to see historical water level and flow data.
           .d-grid.gap-2.col-md-6.mx-auto.mt-4
-            // Buttons to select a river.
-            // These link to /data-visualisation/:fileCode routes.
-            a.btn.btn-outline-primary.btn-lg(href='/data-visualisation/A5H006YRPK') View Limpopo River Data
-            // CHANGED: From btn.success.btn-lg to btn-outline-success.btn-lg
-            a.btn.btn-outline-success.btn-lg(href='/data-visualisation/D1H003YRPK') View Orange River Data
+            // --- UPDATED TO USE DYNAMIC BUTTONS ---
+            if availableRivers && availableRivers.length > 0
+              each river in availableRivers
+                // Use a different color/style for each button if desired, or make them all primary/outline.
+                // You can add more conditional logic here if you have many rivers and want varied colors.
+                // For now, let's keep Limpopo primary outline and others success outline for distinction.
+                - const buttonClass = (river.code === 'A5H006YRPK' ? 'btn btn-outline-primary' : (river.name.includes('Orange') ? 'btn btn-outline-success' : 'btn-outline-info'));
+                a(class=`btn ${buttonClass} btn-lg`, href=`/data-visualisation/${river.code}`) View #{river.name} Data
+            else
+              p.alert.alert-info.mt-3 No river data available to display. Please upload data first in the Admin section.
+            // --- END DYNAMIC BUTTONS ---
 
     // Include the shared footer component  
     include _footer.pug
