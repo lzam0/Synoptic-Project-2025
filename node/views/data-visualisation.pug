@@ -71,7 +71,7 @@ html(lang="en")
           .d-grid.gap-2.col-md-6.mx-auto.mt-4
             if availableRivers && availableRivers.length > 0
               each river in availableRivers
-                - const buttonClass = (river.code === 'A5H006YRPK' ? 'btn btn-outline-primary' : (river.name.includes('Orange') ? 'btn btn-outline-success' : 'btn-outline-info'));
+                - const buttonClass = 'btn btn-outline-primary';
                 a(class=`btn ${buttonClass} btn-lg`, href=`/data-visualisation/${river.code}`) View #{river.name} Data
             else
               p.alert.alert-info.mt-3 No river data available to display. Please upload data first in the Admin section.
