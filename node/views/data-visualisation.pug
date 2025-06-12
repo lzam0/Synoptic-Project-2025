@@ -4,20 +4,13 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Data Visualization for #{riverName ? riverName : 'River Data'}
-    // Link to Bootstrap CSS for styling and responsiveness
     link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
-    // Link to your custom CSS file for site-wide styling (ensure this path is correct if you have one)
     link(rel="stylesheet", href="/css/style.css")
 
-    // --- Chart.js and its Time Adapter Libraries (CRITICAL FOR GRAPHS) ---
-    // Chart.js Core Library (v3.x or compatible)
     script(src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js")
-    // Moment.js (REQUIRED by chartjs-adapter-moment for time scales, even if using 'category' for years)
     script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js")
-    // Chart.js Adapter for Moment.js (Crucial for displaying time on X-axis, depends on Moment.js)
     script(src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0/dist/chartjs-adapter-moment.min.js")
 
-    // Inline style for Google Translate dropdown positioning (Moved to head for better practice)
     style.
       #google_translate_element {
         position: absolute;
@@ -27,10 +20,7 @@ html(lang="en")
       }
 
   body
-    // Google Translate dropdown div and scripts (assuming _translate.pug contains div, script, and style logic)
     include _translate.pug
-      
-    // Include the shared navigation bar component
     include _navbar.pug
 
     .container.mt-5
@@ -38,17 +28,14 @@ html(lang="en")
 
       // Conditional content based on whether a river has been selected AND data is available
       if data && data.length > 0
-        // Display river-specific title if data is present
         h2.text-center.mb-4 #{riverName} Data Overview
 
-        // Row for the charts, optimized for responsiveness
         .row.justify-content-center
           .col-lg-10.col-md-12.mb-4
             .card.shadow-sm.border-primary
               .card-header.bg-primary.text-white.py-3
                 h3.mb-0.text-center Average Level and Flow per Year
               .card-body.p-4
-                // Canvas element for the line chart (Level and Flow)
                 canvas#myChart(width='800' height='400')
 
           .col-lg-10.col-md-12.mb-4
@@ -56,11 +43,9 @@ html(lang="en")
               .card-header.bg-success.text-white.py-3
                 h3.mb-0.text-center Average Flow per Year (Bar Chart)
               .card-body.p-4
-                // Canvas element for the bar chart (Flow)
                 canvas#barChart(width='800' height='400')
 
           .col-lg-10.col-md-12.mb-4
-            // Container for the data table, which will be rendered dynamically by charts.js
             div#dataTableContainer
 
         // Pass the raw data from the server (fetched from DB) and other info to the client-side JavaScript.
@@ -71,36 +56,25 @@ html(lang="en")
         script(src='/js/chart.js')
 
       else if selectedRiverCode
-        // Message if a river was selected but no data was found (e.g., database empty for that station)
         .alert.alert-warning.text-center.mt-5(role="alert")
           h4.alert-heading No Data Found!
           p It looks like there's no historical data available for the selected river station yet.
           hr
           p.mb-0 Please ensure data is uploaded for this station in the admin panel or try another river.
           .d-grid.gap-2.col-md-6.mx-auto.mt-4
-            // Button to go back to initial selection or try again
             a.btn.btn-outline-secondary.btn-lg(href='/data-visualisation') Select Another River
 
       else
-        // Display selection options if no river data is currently loaded (initial page visit)
         .text-center.mt-5
           h2 Please select a river to view its data visualizations.
           p Choose from the options below to see historical water level and flow data.
           .d-grid.gap-2.col-md-6.mx-auto.mt-4
-            // --- UPDATED TO USE DYNAMIC BUTTONS ---
             if availableRivers && availableRivers.length > 0
               each river in availableRivers
-                // Use a different color/style for each button if desired, or make them all primary/outline.
-                // You can add more conditional logic here if you have many rivers and want varied colors.
-                // For now, let's keep Limpopo primary outline and others success outline for distinction.
-                - const buttonClass = (river.code === 'A5H006YRPK' ? 'btn btn-outline-primary' : (river.name.includes('Orange') ? 'btn btn-outline-success' : 'btn-outline-info'));
+                - const buttonClass = 'btn btn-outline-primary';
                 a(class=`btn ${buttonClass} btn-lg`, href=`/data-visualisation/${river.code}`) View #{river.name} Data
             else
               p.alert.alert-info.mt-3 No river data available to display. Please upload data first in the Admin section.
-            // --- END DYNAMIC BUTTONS ---
 
-    // Include the shared footer component  
     include _footer.pug
-
-    // Link to Bootstrap Bundle JS for dropdowns and other interactive components
     include _bootstrap.pug
