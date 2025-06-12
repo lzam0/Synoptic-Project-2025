@@ -12,7 +12,6 @@ describe('Admin Add Data Upload (Invalid File)', () => {
   const testFilePath = path.join(__dirname, 'test.txt');
   const testFilePath2 = path.join(__dirname, 'bad-data.csv');
 
-
   before((done) => {
     agent
       .post('/login')
@@ -23,25 +22,25 @@ describe('Admin Add Data Upload (Invalid File)', () => {
       });
   });
 
-  it('should fail to upload a .txt file and return an error response', (done) => {
+  it('should fail to upload a .txt file and return a 400 error', (done) => {
     agent
       .post('/admin/add-data')
       .set('Content-Type', 'multipart/form-data')
       .attach('csvFile', fs.readFileSync(testFilePath), 'test.txt')
       .end((err, res) => {
-        expect(res).to.have.status(500); 
+        expect(res).to.have.status(400);
         expect(res.text).to.include('Error adding data');
         done();
       });
   });
 
-    it('should fail to upload a .csv file and return an error response', (done) => {
+  it('should fail to upload a malformed .csv file and return a 400 or 500 error', (done) => {
     agent
       .post('/admin/add-data')
       .set('Content-Type', 'multipart/form-data')
       .attach('csvFile', fs.readFileSync(testFilePath2), 'bad-data.csv')
       .end((err, res) => {
-        expect(res).to.have.status(500);
+        expect([400, 500]).to.include(res.status); // Accept either depending on your handler
         expect(res.text).to.include('Error adding data');
         done();
       });

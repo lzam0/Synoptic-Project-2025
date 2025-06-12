@@ -59,13 +59,18 @@ async function parseCSVFile(filePath) {
   let dataSection = false;
   let insertedCount = 0;
   let skippedCount = 0;
+  let rowCount = 0;
 
   for await (const row of parser) {
+    rowCount++;
     if (!dataSection && row[0]?.replace('\uFEFF', '').trim() === 'Year') {
       console.log('✅ Data section found — starting to parse rows...');
       dataSection = true;
       continue;
     }
+      throw new Error('Invalid CSV: Missing "Year" header — not in expected format.');
+    }
+
     if (!dataSection || !row[0] || isNaN(row[0])) continue;
 
     const year = parseInt(row[0]);
@@ -94,7 +99,6 @@ async function parseCSVFile(filePath) {
       );
 
       if (existing.rows.length > 0) {
-        // console.log(`⏭️  Skipping duplicate: ${station} - ${date} ${timeStr}`);
         skippedCount++;
         continue;
       }
@@ -109,6 +113,10 @@ async function parseCSVFile(filePath) {
     } catch (err) {
       console.error(`❌ Error inserting row: ${JSON.stringify(row)}`, err.message);
     }
+  }
+
+  if (!dataSection) {
+    throw new Error('Invalid CSV: "Year" header not found — no data section detected.');
   }
 
   await client.end();

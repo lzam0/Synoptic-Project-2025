@@ -3,7 +3,7 @@ const router = express.Router();
 const authenticateToken = require('../middleware/authMiddleware');
 const multer = require('multer');
 const path = require('path');
-const parseCSVFile = require('../parser/riverParser.js');
+const { parseCSVFile } = require('../parser/riverParser.js');
 const fs = require('fs');
 const pool = require('../db');
 const { Parser } = require('json2csv');
@@ -39,21 +39,40 @@ router.get('/admin', authenticateToken, async (req, res) => {
 
 // POST /admin/add-data - Add new CSV data
 router.post('/admin/add-data', authenticateToken, upload.single('csvFile'), async (req, res) => {
+  const filePath = req.file?.path;
+  const originalName = req.file?.originalname;
+
   try {
-    const filePath = req.file.path;
-    const datePeriod = req.body.datePeriod;
+    // ✅ Reject if no file uploaded
+    if (!filePath || !originalName) {
+      return res.status(400).send('Error adding data');
+    }
 
-    console.log('Adding data:', filePath, datePeriod);
+    const fileExt = path.extname(originalName).toLowerCase();
 
-    // Parse the CSV and insert data
+    // ✅ Reject non-CSV files
+    if (fileExt !== '.csv') {
+      fs.unlinkSync(filePath); // Clean up
+      return res.status(400).send('Error adding data');
+    }
+
+    console.log('Adding data:', filePath);
+
+    // ✅ Parse the CSV and insert data
     await parseCSVFile(filePath);
 
-    // Delete uploaded file after parsing
+    // ✅ Delete uploaded file after parsing
     fs.unlinkSync(filePath);
 
     res.redirect('/admin');
   } catch (err) {
-    console.error('Error adding data:', err);
+    console.error('Error adding data:', err.message);
+
+    // ✅ Clean up uploaded file if it still exists
+    if (filePath && fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
     res.status(500).send('Error adding data');
   }
 });
@@ -64,11 +83,9 @@ router.post('/admin/remove-data', authenticateToken, async (req, res) => {
 
   try {
     if (referenceNumber) {
-      // Remove by river_id
       await pool.query('DELETE FROM river WHERE river_id = $1', [referenceNumber]);
       console.log(`Deleted river_id: ${referenceNumber}`);
     } else if (removeDatePeriod) {
-      // Remove by date
       await pool.query('DELETE FROM river WHERE date = $1', [removeDatePeriod]);
       console.log(`Deleted rows with date: ${removeDatePeriod}`);
     } else {
@@ -105,7 +122,6 @@ router.get('/admin/export-data', authenticateToken, async (req, res) => {
     const json2csvParser = new Parser();
     const csv = json2csvParser.parse(data);
 
-    // Set CSV headers and send file
     res.header('Content-Type', 'text/csv');
     res.attachment('river_data_export.csv');
     res.send(csv);
