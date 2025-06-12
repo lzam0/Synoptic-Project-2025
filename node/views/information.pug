@@ -22,7 +22,10 @@ html
         .sidebar-list
           each article in articles
             a.sidebar-item(href=`/information/article/${article.id}`)
-              img.sidebar-thumb(src="/images/bluelines.png", alt="thumb")
+              if article.id === 1
+                img.sidebar-thumb(src="/images/bite2.png", alt="Interactive Informatics")
+              else
+                img.sidebar-thumb(src="/images/bluelines.png", alt="thumbnail")
               .sidebar-info
                 .sidebar-title #{article.title}
                 .sidebar-author #{article.author}

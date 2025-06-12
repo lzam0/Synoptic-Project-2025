@@ -11,6 +11,14 @@ router.get('/information/article/0', (req, res) => {
   res.render('info0', { user: req.user, articles });
 });
 
+router.get('/information/article/1', (req, res) => {
+  res.render('info1', { user: req.user, articles });
+});
+
+router.get('information/article/2', (req, res) => {
+  res.render('info2', { user: req.user, articles });
+});
+
 router.get('/information/article/:id', (req, res) => {
   const articleId = parseInt(req.params.id, 10);
   const article = articles.find(a => a.id === articleId);
