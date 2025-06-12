@@ -71,7 +71,7 @@ if (process.env.IMPORT_CSV_ON_START === 'true') {
 // Only start server if NOT in test mode
 if (process.env.NODE_ENV !== 'test') {
   app.listen(port, () => {
-    console.log(`🏐🏐🏐🏐🏐 LEIHL ZAMBRANO TEST BRANCH 1.0 listening on port ${port}`);
+    console.log(`🚀 Server running at http://localhost:${port} 🚀`);
   });
 
   process.on('SIGINT', () => {
