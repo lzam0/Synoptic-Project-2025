@@ -20,12 +20,12 @@ html
       .sidebar
         h3 Other Articles & Reports
         .sidebar-list
-          each val, i in [1,2,3,4]
-            .sidebar-item
+          each article in articles
+            a.sidebar-item(href=`/information/article/${article.id}`)
               img.sidebar-thumb(src="/images/bluelines.png", alt="thumb")
               .sidebar-info
-                .sidebar-title Article #{i}
-                .sidebar-author Author Name
+                .sidebar-title #{article.title}
+                .sidebar-author #{article.author}
       .main-content
         h1 Information Page
         h2 Wastage and Flooding
