@@ -3,17 +3,15 @@ const path = require('path');
 const { parse } = require('csv-parse');
 const { Client } = require('pg');
 
-// Import connection pool
-const pool = require('../db'); // since we're inside node/parsers/
+// Import connection pool config
+const pool = require('../db');
 
-// Path to data folder (relative from node/parsers/)
-const DATA_FOLDER = path.join(__dirname, '../../data');
+// Path to data folder (relative to this file)
+const DATA_FOLDER = path.join(__dirname, '..', '..', 'data');
 
 // Safe parse function for level/flow
 function safeParseNumber(value) {
-  if (value === undefined || value === null || value === '') {
-    return null;
-  }
+  if (!value) return null;
   const num = parseFloat(value);
   return isNaN(num) ? null : num;
 }
@@ -28,17 +26,16 @@ async function parseCSVFile(filePath) {
   });
 
   await client.connect();
-
-  console.log(`Parsing file: ${filePath}`);
+  console.log(`🔍 Parsing file: ${filePath}`);
 
   let station = '';
   let location = '';
 
   const lines = fs.readFileSync(filePath, 'utf-8').split('\n');
 
- // Try to find station and location info before "Hydro" header
+  // Extract station and location before the "Hydro" header
   for (let i = 0; i < lines.length; i++) {
-    if (lines[i].trim().match(/^Hydro/i)) {
+    if (/^Hydro/i.test(lines[i].trim())) {
       for (let j = i - 1; j >= 0; j--) {
         if (lines[j].trim()) {
           const parts = lines[j].trim().split(/\s+/);
@@ -53,23 +50,33 @@ async function parseCSVFile(filePath) {
     }
   }
 
-  console.log(`Found station: ${station}, location: ${location}`);
+  console.log(`📍 Found station: ${station}, location: ${location}`);
 
   const parser = fs.createReadStream(filePath).pipe(
     parse({ relax_column_count: true, trim: true })
   );
 
   let dataSection = false;
+  let insertedCount = 0;
+  let skippedCount = 0;
+  let rowCount = 0;
 
   for await (const row of parser) {
-    if (!dataSection && row[0] && row[0].replace('\uFEFF','').trim() === 'Year') {
+    rowCount++;
+
+    // Check for "Year" header — required to begin parsing
+    if (!dataSection && row[0]?.replace('\uFEFF', '').trim() === 'Year') {
       console.log('✅ Data section found — starting to parse rows...');
       dataSection = true;
       continue;
     }
-    if (!dataSection) continue;
 
-    if (!row[0] || isNaN(row[0])) continue;
+    // Fail if we've read through 20+ rows with no "Year" header
+    if (!dataSection && rowCount > 20) {
+      throw new Error('Invalid CSV: Missing "Year" header — not in expected format.');
+    }
+
+    if (!dataSection || !row[0] || isNaN(row[0])) continue;
 
     const year = parseInt(row[0]);
     const dateStr = row[1]?.trim();
@@ -79,53 +86,57 @@ async function parseCSVFile(filePath) {
 
     if (!dateStr || !timeStr) continue;
 
-    let date = null;
+    let date;
     try {
-      // Format YYYYMMDD -> ISO date
       date = `${dateStr.slice(0, 4)}-${dateStr.slice(4, 6)}-${dateStr.slice(6, 8)}`;
     } catch {
-      console.warn(`Invalid date: ${dateStr}`);
+      console.warn(`⚠️ Invalid date: ${dateStr}`);
       continue;
     }
 
-    // Use safeParseNumber for level/flow
     const level = safeParseNumber(levelStr);
     const flow = safeParseNumber(flowStr);
 
-    // Optional: Check for existing entry
-    const existing = await client.query(
-      'SELECT 1 FROM river WHERE station = $1 AND date = $2 AND time = $3',
-      [station, date, timeStr]
-    );
-
-    if (existing.rows.length > 0) {
-      console.log(`Skipping duplicate: ${station} - ${date} ${timeStr}`);
-      continue;
-    }
-
-    // Insert into DB
     try {
+      const existing = await client.query(
+        'SELECT 1 FROM river WHERE station = $1 AND date = $2 AND time = $3',
+        [station, date, timeStr]
+      );
+
+      if (existing.rows.length > 0) {
+        skippedCount++;
+        continue;
+      }
+
       await client.query(
         `INSERT INTO river (station, location, year, date, time, level, flow)
          VALUES ($1, $2, $3, $4, $5, $6, $7)`,
         [station, location, year, date, timeStr, level, flow]
       );
+
+      insertedCount++;
     } catch (err) {
-      console.error(`Error inserting row: ${row}`, err.message);
+      console.error(`❌ Error inserting row: ${JSON.stringify(row)}`, err.message);
     }
   }
 
+  if (!dataSection) {
+    throw new Error('Invalid CSV: "Year" header not found — no data section detected.');
+  }
+
   await client.end();
+  console.log(`📄 Finished ${filePath}: ${insertedCount} inserted, ${skippedCount} skipped.`);
 }
 
 async function main() {
   try {
+    console.log('📁 Reading data folder...');
     const files = fs.readdirSync(DATA_FOLDER).filter(file =>
       file.toLowerCase().endsWith('.csv')
     );
 
     if (files.length === 0) {
-      console.log(`No CSV files found in ${DATA_FOLDER}`);
+      console.log(`⚠️ No CSV files found in ${DATA_FOLDER}`);
       return;
     }
 
@@ -140,5 +151,10 @@ async function main() {
   }
 }
 
+// Export for use in server.js
 module.exports = { parseCSVFile, main };
 
+// If run directly: node riverParser.js
+if (require.main === module) {
+  main();
+}

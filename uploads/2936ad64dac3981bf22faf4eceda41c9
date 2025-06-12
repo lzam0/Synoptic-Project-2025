@@ -1,0 +1,5 @@
+station,location,year,date,time,level,flow
+River Thames,London,2022,2022-05-01,14:00,1.5
+River Avon,Bath,2023,2023-06-10,09:30,abc,3.2
+,,2023,2023-07-15,10:00,1.2,2.3
+River Clyde,Glasgow,2021,not-a-date,12:00,1.8,3.5
