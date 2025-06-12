@@ -18,6 +18,16 @@ html(lang="en")
       h1.text-center.mb-4 Admin Dashboard
       p.lead.text-center Welcome, Admin! Manage your data here.
 
+      // Alert messages for errors or success
+      if error
+        .alert.alert-danger(role="alert")
+          strong Error: 
+          | #{error}
+      if success
+        .alert.alert-success(role="alert")
+          strong Success: 
+          | #{success}
+
       // Add Data Section
       section.admin-section.mb-4.p-4.border.rounded.shadow-sm
         h2.mb-3 Add Data
@@ -84,5 +94,3 @@ html(lang="en")
 
     // Link to Bootstrap Bundle JS for dropdowns and other interactive components
     include _bootstrap.pug
-
-
