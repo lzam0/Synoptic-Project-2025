@@ -140,4 +140,5 @@ async function main() {
   }
 }
 
-module.exports = parseCSVFile;
+module.exports = { parseCSVFile, main };
+

@@ -63,7 +63,8 @@ app.use((req, res, next) => {
 
 // Parse CSV files on server start up
 if (process.env.IMPORT_CSV_ON_START === 'true') {
-  require('./parser/riverParser');
+  const parser = require('./parser/riverParser');
+  parser.main();
 }
 
 // Start the server
